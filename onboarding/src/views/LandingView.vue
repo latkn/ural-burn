@@ -38,12 +38,12 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
             место, которое мы сами делаем таким, каким хотим его видеть.
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <RouterLink
+            <!-- <RouterLink
               to="/onboarding"
               class="inline-flex items-center justify-center rounded-xl bg-burn-orange px-8 py-4 font-semibold text-burn-black transition hover:bg-burn-orangeLight"
             >
               Стать участником
-            </RouterLink>
+            </RouterLink> -->
             <!-- <a
               :href="TG_GROUP"
               target="_blank"
@@ -84,14 +84,14 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
           Наследие — не пыль на страницах книг. Оно живёт здесь и сейчас: в наших сердцах,
           в наших руках, в пламени костра. Ждём, какие волшебные миры вы принесёте с собой.
         </p>
-        <div class="pt-4">
+        <!-- <div class="pt-4">
           <RouterLink
             to="/onboarding"
             class="inline-flex items-center justify-center rounded-xl bg-burn-orange px-8 py-3 font-semibold text-burn-black transition hover:bg-burn-orangeLight"
           >
             Присоединиться к Уральскому Бёрну 2026
           </RouterLink>
-        </div>
+        </div> -->
       </div>
     </section>
 

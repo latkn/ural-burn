@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "optimize-images": "node scripts/optimize-images.mjs",
+    "prebuild": "node scripts/optimize-images.mjs",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
@@ -21,6 +23,7 @@
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
+    "sharp": "^0.33.5",
     "@vitejs/plugin-vue": "^5.1.4",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
