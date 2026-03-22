@@ -19,9 +19,6 @@ const isLanding = computed(() => route.name === 'landing')
       <main class="flex-1 container max-w-2xl mx-auto px-4 py-8">
         <RouterView />
       </main>
-      <footer class="border-t border-burn-border py-3 px-4 text-center text-sm text-burn-muted">
-        Никакой коммерции. После аттестации — сертификат онбординга.
-      </footer>
     </template>
     <template v-else>
       <RouterView />

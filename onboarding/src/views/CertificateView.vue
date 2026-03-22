@@ -29,6 +29,10 @@ const displayName = computed(() => holderName.value.trim() || '________________'
 
 const canDownload = computed(() => holderName.value.trim().length >= 2)
 
+/** Публичная ссылка-приглашение в Telegram; переопределяется через VITE_CHAT_LINK в Netlify / .env */
+const communityChatUrl =
+  import.meta.env.VITE_CHAT_LINK?.trim() || 'https://t.me/+0MWtWVzR6pdlMTIy'
+
 onMounted(() => {
   if (!state.value.attestationPassed || !state.value.certificateCode?.trim()) {
     router.replace({ name: 'attestation' })
@@ -67,7 +71,7 @@ async function onDownloadPdf() {
 <template>
   <div class="space-y-8">
     <div>
-      <h1 class="font-display text-3xl text-burn-cream">Сертификат онбординга</h1>
+      <h1 class="font-display text-3xl text-burn-cream">Сертификат бёрнера</h1>
       <p class="mt-3 text-burn-cream/85 leading-relaxed">
         Ты прошёл(а) аттестацию. Укажи имя для сертификата — оно сохранится только в этом браузере.
         Ниже твой уникальный код: его можно сообщить организаторам или приложить к сообщению вместе с PDF.
@@ -96,6 +100,23 @@ async function onDownloadPdf() {
       <p class="mt-3 text-xs text-burn-muted leading-relaxed">
         Код выдан сервером после успешной аттестации и записан в базу (без имени) — организаторы могут проверить его в админке.
       </p>
+    </div>
+
+    <div
+      class="rounded-xl border border-burn-border bg-burn-card/90 p-5 shadow-[0_0_24px_rgba(0,0,0,0.25)]"
+    >
+      <h2 class="font-display text-lg text-burn-cream">Группа «Уральский бёрн» в Telegram</h2>
+      <p class="mt-2 text-sm leading-relaxed text-burn-cream/85">
+        Вступи в группу сообщества, чтобы быть в курсе всех новостей, анонсов и жизни бёрна.
+      </p>
+      <a
+        :href="communityChatUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-4 inline-flex items-center justify-center rounded-xl border border-burn-orange/60 bg-burn-orange/10 px-5 py-3 text-sm font-semibold text-burn-orange transition hover:bg-burn-orange/20 hover:border-burn-orange"
+      >
+        Вступить в группу
+      </a>
     </div>
 
     <p v-if="pdfError" class="text-sm text-amber-400">{{ pdfError }}</p>
@@ -140,7 +161,7 @@ async function onDownloadPdf() {
           </div>
           <p v-if="passedAt" class="text-xs text-burn-muted">Дата: {{ passedAt }}</p>
           <p class="text-[11px] leading-relaxed text-burn-muted/90">
-            Документ сформирован автоматически после прохождения аттестации на сайте онбординга.
+            Документ сформирован автоматически после прохождения теста на знание принципов Burning Man.
             Сообщите организаторам этот код — так мы сможем подтвердить прохождение.
           </p>
           <p class="text-2xl" aria-hidden="true">🔥</p>
@@ -164,5 +185,17 @@ async function onDownloadPdf() {
         На главную
       </RouterLink>
     </div>
+
+    <p class="text-center text-sm text-burn-muted">
+      Новости сообщества —
+      <a
+        :href="communityChatUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-burn-orange underline hover:text-burn-orangeLight"
+      >
+        группа в Telegram
+      </a>
+    </p>
   </div>
 </template>

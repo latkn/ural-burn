@@ -23,6 +23,7 @@ export default {
       fontFamily: {
         sans: ['Montserrat', 'system-ui', 'sans-serif'],
         display: ['Playfair Display', 'serif'],
+        quote: ['Cormorant Garamond', 'Georgia', 'serif'],
       },
     },
   },

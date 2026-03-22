@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { useRouter, RouterLink } from 'vue-router'
 import { useOnboardingState } from '@/composables/useOnboardingState'
+import FormattedBody from '@/components/FormattedBody.vue'
 
 const router = useRouter()
+
+const introText = `Нам важно, чтобы каждый участник был с нами на одной волне: от этого зависит **доверие** и та самая атмосфера, ради которой мы собираемся. Поэтому поток единый: **новички — обучение и тест на знание принципов**, с опытом бёрнов — **тот же тест** (без глав обучения).
+
+Даже опыт не отменяет этого шага: на практике мы часто видим, что люди приходят с **разным пониманием базовых правил и ценностей**, а атмосферу бёрна легко испортить — недопонимание и «мелочи» накапливаются быстрее, чем кажется. Тест на знание принципов как раз про то, чтобы **говорить на одном языке** о том, что для нас не обсуждается. В конце — **электронный сертификат с уникальным кодом** (можно скачать PDF), когда тест успешно пройден.`
 const { setPath } = useOnboardingState()
 
 function choose(path: 'newcomer' | 'experienced') {
@@ -17,13 +22,10 @@ function choose(path: 'newcomer' | 'experienced') {
 
 <template>
   <div class="space-y-8">
-    <h1 class="font-display text-3xl text-burn-cream">Онбординг Уральского бёрна</h1>
-    <p class="text-burn-cream/90">
-      Все участники проходят один поток: новички — обучение и аттестацию, те, у кого уже есть опыт бёрнов, — только аттестацию.
-      В конце — электронный сертификат с уникальным кодом (можно скачать PDF), когда успешно пройдёшь аттестацию.
-    </p>
+    <h1 class="font-display text-3xl sm:text-4xl text-burn-cream">Принципы сообщества Burning Man</h1>
+    <FormattedBody :text="introText" />
 
-    <p class="text-burn-cream/80 font-medium">Как тебе удобнее?</p>
+    <p class="text-lg font-semibold text-burn-cream">Как тебе удобнее?</p>
     <div class="grid gap-4 sm:grid-cols-2">
       <button
         type="button"
@@ -31,7 +33,7 @@ function choose(path: 'newcomer' | 'experienced') {
         @click="choose('newcomer')"
       >
         <span class="block font-semibold text-burn-cream">Я новичок в бёрн-культуре</span>
-        <span class="mt-1 block text-sm text-burn-cream/80">Главы с мини-проверкой после каждой, затем аттестация</span>
+        <span class="mt-1 block text-base text-burn-cream/80">Главы с мини-проверкой после каждой, затем тест на знание принципов</span>
       </button>
       <button
         type="button"
@@ -39,7 +41,7 @@ function choose(path: 'newcomer' | 'experienced') {
         @click="choose('experienced')"
       >
         <span class="block font-semibold text-burn-cream">У меня уже есть опыт бёрнов / кемпов</span>
-        <span class="mt-1 block text-sm text-burn-cream/80">Сразу аттестация (тест знаний + согласие)</span>
+        <span class="mt-1 block text-base text-burn-cream/80">Сразу тест на знание принципов и согласие</span>
       </button>
     </div>
 

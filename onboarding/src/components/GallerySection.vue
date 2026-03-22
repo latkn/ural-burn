@@ -42,12 +42,12 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
       <p v-if="galleryUrls.length === 0" class="text-burn-muted text-sm">
         Добавьте изображения в папку <code class="bg-burn-card px-1 rounded">src/assets/gallery</code> — они появятся здесь.
       </p>
-      <div v-else class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div v-else class="grid grid-cols-4 md:grid-cols-6 gap-2 sm:gap-2.5">
         <button
           v-for="(url, index) in galleryUrls"
           :key="url"
           type="button"
-          class="aspect-square rounded-xl overflow-hidden border border-burn-border focus:outline-none focus:ring-2 focus:ring-burn-orange focus:ring-offset-2 focus:ring-offset-burn-dark"
+          class="aspect-square rounded-lg overflow-hidden border border-burn-border focus:outline-none focus:ring-2 focus:ring-burn-orange focus:ring-offset-2 focus:ring-offset-burn-dark"
           @click="openLightbox(index)"
         >
           <img :src="url" :alt="`Фото ${index + 1}`" class="w-full h-full object-cover" />

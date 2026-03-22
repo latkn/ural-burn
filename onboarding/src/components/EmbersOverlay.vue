@@ -90,13 +90,20 @@ const manualParticles = computed(() => {
   const count = Math.max(0, Math.round(props.density))
   const res: Array<{ position: { x: number; y: number } }> = []
 
+  // Центр чуть ниже середины экрана и чуть больший разброс по вертикали,
+  // чтобы искры не «обрывались» над нижней частью первого экрана (текст + CTA).
+  const cx = 50
+  const cy = 60
+  const rx = 1
+  const ry = 1.22
+
   for (let i = 0; i < count; i += 1) {
     const a = Math.random() * Math.PI * 2
     const u = Math.random()
-    const r = Math.pow(u, 0.62) * 72
+    const r = Math.pow(u, 0.58) * 78
 
-    const x = clamp(50 + Math.cos(a) * r, 0, 100)
-    const y = clamp(50 + Math.sin(a) * r, 0, 100)
+    const x = clamp(cx + Math.cos(a) * r * rx, 0, 100)
+    const y = clamp(cy + Math.sin(a) * r * ry, 0, 100)
 
     res.push({ position: { x, y } })
   }
@@ -195,7 +202,9 @@ const baseOptions = computed(() => ({
         class="absolute inset-0"
         :style="{ width: '100%', height: '100%' }"
       />
-      <div class="absolute inset-0 bg-gradient-to-t from-burn-orange/10 via-transparent to-transparent" />
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-burn-orange/6 via-burn-orange/[0.03] to-transparent"
+      />
     </div>
   </div>
 </template>

@@ -9,7 +9,13 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
 <template>
   <div class="landing">
     <!-- Искры как фоновый слой по странице, плавно затухают вниз -->
-    <EmbersOverlay class="fixed inset-0 opacity-95 z-10" :strength="28" :density="160" />
+    <EmbersOverlay
+      class="fixed inset-0 opacity-95 z-10"
+      :strength="28"
+      :density="160"
+      :fade-start-vh="220"
+      :fade-end-vh="560"
+    />
 
     <!-- Первый экран (hero + вступление) -->
     <div class="relative">
@@ -92,7 +98,7 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
     <!-- Как это было (первый бёрн) -->
     <section class="px-4 py-16 md:py-24 border-t border-burn-border">
       <div class="max-w-5xl mx-auto">
-        <h2 class="font-display text-3xl sm:text-4xl text-burn-cream mb-8">Как это было</h2>
+        <h2 class="font-display text-3xl sm:text-4xl text-burn-cream mb-8">Как это было в 2025</h2>
         <p class="text-burn-cream/70 text-sm uppercase tracking-wide mb-4">
           Wild Tribe — первый Уральский бёрн
         </p>
@@ -155,8 +161,8 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
     <section class="px-4 py-16 md:py-24 border-t border-burn-border bg-burn-dark/50">
       <div class="max-w-3xl mx-auto text-center">
         <blockquote class="font-display text-2xl sm:text-3xl text-burn-cream/95 italic leading-relaxed">
-          Бёрн — это не место, это люди, это тот огонь, который мы разжигаем в сердцах друг друга
-          и который хотим хранить до следующей встречи.
+          Бёрн — это не место. Это люди. Это тот огонь, который мы разжигаем в сердцах друг друга.
+          Который мы хотим хранить до следующей встречи.
         </blockquote>
         <p class="mt-6 text-burn-orange text-lg">🔥</p>
       </div>
@@ -168,7 +174,7 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
         <h2 class="font-display text-3xl sm:text-4xl text-burn-cream mb-8">7 кэмпов</h2>
         <ul class="space-y-6">
           <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card p-5">
-            <span class="text-burn-orange font-medium shrink-0">Frame Tribe</span>
+            <span class="text-burn-orange font-medium shrink-0">Flame Tribe</span>
             <span class="text-burn-cream/85">
               Дикий, раскачивающий не только пространство, но и материю, танцпол в дремучей тайге,
               среди мхов, елей и лишайников.
@@ -224,11 +230,20 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
               Теплые, мягкие, согревающие церемонии и горячие чаны под величественными деревьями.
             </span>
           </li>
-          <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card p-5">
-            <span class="text-burn-orange font-medium shrink-0">Tundra Club</span>
-            <span class="text-burn-cream/85">
-              Мощный шатер света, дыма и плотного звука с мини-баром.
-            </span>
+          <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card overflow-hidden">
+            <div class="w-32 sm:w-40 shrink-0 aspect-[4/3]">
+              <img
+                :src="img('tundra.jpg')"
+                alt="Tundra Club"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-5 flex-1 min-w-0">
+              <span class="text-burn-orange font-medium">Tundra Club</span>
+              <span class="block text-burn-cream/85 mt-1">
+                Мощный шатер света, дыма и плотного звука с мини-баром.
+              </span>
+            </div>
           </li>
           <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card overflow-hidden">
             <div class="w-32 sm:w-40 shrink-0 aspect-[4/3]">
@@ -258,15 +273,15 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
       <div class="max-w-2xl mx-auto text-center space-y-8">
         <h2 class="font-display text-3xl sm:text-4xl text-burn-cream">Присоединяйся</h2>
         <p class="text-burn-cream/85 text-lg">
-          В группе Wild Tribe уже строят планы на будущее. Чтобы стать участником следующего бёрна —
-          пройди онбординг и аттестацию — в конце можно скачать сертификат с уникальным кодом.
+          Мы создали удобную систему обучения для всех желающих стать частью события. Здесь ты сможешь узнать о принципах сообщества Burning Man и правилах Уральского бёрна, а также о способах участия.
+          Это своеобразный вайб-чек. Если ты с нами на одной волне, то в конце теста получишь ссылку на чат участников.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <RouterLink
             to="/onboarding"
             class="inline-flex items-center justify-center rounded-xl bg-burn-orange px-8 py-4 font-semibold text-burn-black transition hover:bg-burn-orangeLight"
           >
-            Перейти к онбордингу
+            Перейти
           </RouterLink>
           <!-- <a
             :href="TG_GROUP"
@@ -282,7 +297,7 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
 
     <!-- Мини-футер -->
     <footer class="border-t border-burn-border py-6 px-4 text-center text-sm text-burn-muted">
-      Уральский бёрн — никакой коммерции. Участие и сообщество.
+      Уральский бёрн. Никакой коммерции. Участие и Сообщество.
     </footer>
   </div>
 </template>
