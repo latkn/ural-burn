@@ -1,0 +1,9 @@
+[build]
+  base = "onboarding"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # Для деплоя в корень сайта (не под /onboarding/):
+  VITE_BASE_URL = "/"
