@@ -104,7 +104,7 @@ function retryKnowledge() {
 
 <template>
   <div class="space-y-8">
-    <h1 class="font-display text-3xl sm:text-4xl text-burn-cream">Тест на знание принципов Burning Man</h1>
+    <h1 class="font-display text-3xl sm:text-4xl text-burn-cream">Тест на знание принципов бёрн-сообщества</h1>
 
     <template v-if="phase === 'knowledge'">
       <p class="text-lg leading-relaxed text-burn-cream/85">

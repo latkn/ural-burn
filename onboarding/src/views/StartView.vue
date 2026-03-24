@@ -22,7 +22,7 @@ function choose(path: 'newcomer' | 'experienced') {
 
 <template>
   <div class="space-y-8">
-    <h1 class="font-display text-3xl sm:text-4xl text-burn-cream">Принципы сообщества Burning Man</h1>
+    <h1 class="font-display text-3xl sm:text-4xl text-burn-cream">Принципы бёрн-сообщества</h1>
     <FormattedBody :text="introText" />
 
     <p class="text-lg font-semibold text-burn-cream">Как тебе удобнее?</p>

@@ -161,7 +161,7 @@ async function onDownloadPdf() {
           </div>
           <p v-if="passedAt" class="text-xs text-burn-muted">Дата: {{ passedAt }}</p>
           <p class="text-[11px] leading-relaxed text-burn-muted/90">
-            Документ сформирован автоматически после прохождения теста на знание принципов Burning Man.
+            Документ сформирован автоматически после прохождения теста на знание принципов бёрн-сообщества.
             Сообщите организаторам этот код — так мы сможем подтвердить прохождение.
           </p>
           <p class="text-2xl" aria-hidden="true">🔥</p>

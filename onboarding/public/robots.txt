@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ural-burn.ru/sitemap.xml

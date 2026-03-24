@@ -15,14 +15,20 @@ defineProps<{
     >
       <div class="flex gap-3 p-5 sm:gap-6 sm:p-7">
         <div
-          class="flex w-[4.25rem] shrink-0 flex-col items-center justify-start sm:w-[5rem]"
+          class="flex w-[7.75rem] shrink-0 items-center justify-center gap-2 self-center sm:w-[9.25rem] sm:gap-3"
           aria-hidden="true"
         >
           <span
-            class="font-display text-[2.75rem] leading-none tracking-tight text-burn-orange/95 tabular-nums sm:text-[3.5rem]"
+            class="font-display text-[3.6rem] leading-none tracking-tight text-burn-orange/95 tabular-nums sm:text-[4.2rem]"
           >
             {{ String(p.n).padStart(2, '0') }}
           </span>
+          <div
+            v-if="p.symbol"
+            class="flex h-[4.9rem] w-[4.9rem] items-center justify-center rounded-2xl border border-burn-orange/25 bg-burn-dark/55 p-2 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] sm:h-[6rem] sm:w-[6rem]"
+          >
+            <img :src="p.symbol" :alt="''" class="h-full w-full object-contain opacity-95" loading="lazy" decoding="async">
+          </div>
         </div>
         <div class="min-w-0 flex-1 border-l border-burn-orange/25 pl-4 sm:pl-6">
           <blockquote
