@@ -111,7 +111,7 @@ function retryKnowledge() {
         <strong class="font-semibold text-burn-cream">Тест знаний.</strong>
         Один правильный ответ на каждый вопрос. Для прохождения нужно
         <strong class="font-semibold text-burn-cream">100% правильных ответов</strong> — иначе сертификат не выдаётся.
-        Можно вернуться к предыдущим вопросам и изменить ответ; дальше без ответа на текущий вопрос не пройти.
+        Можно вернуться к предыдущим вопросам и изменить ответ;
       </p>
 
       <div v-if="knowledgeFailure" class="rounded-xl border border-red-500/50 bg-red-500/10 p-6 sm:p-8">
