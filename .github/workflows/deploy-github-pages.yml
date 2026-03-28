@@ -1,0 +1,65 @@
+# Сборка onboarding (Vite + Vue) и публикация на GitHub Pages.
+# Netlify от этого не ломается — отдельный деплой по тому же пушу.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: onboarding/package-lock.json
+
+      - name: Install dependencies
+        working-directory: onboarding
+        run: npm ci
+
+      - name: Build
+        working-directory: onboarding
+        env:
+          # Обязательно добавь в Settings → Secrets and variables → Actions
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          # Опционально (иначе дефолт из кода)
+          VITE_CHAT_LINK: ${{ secrets.VITE_CHAT_LINK }}
+          # Только если сайт на Pages будет не с корня, а вида user.github.io/ИМЯ-РЕПО/
+          # Тогда задай секрет, например: /ИМЯ-РЕПО/ (со слэшами)
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+        run: npm run build
+
+      # GitHub Pages отдаёт 404.html при несуществующем пути — нужно для Vue Router (history)
+      - name: SPA fallback
+        working-directory: onboarding
+        run: cp dist/index.html dist/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: onboarding/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

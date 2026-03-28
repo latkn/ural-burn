@@ -1,9 +1,40 @@
 <script setup lang="ts">
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import GallerySection from '@/components/GallerySection.vue'
 import EmbersOverlay from '@/components/EmbersOverlay.vue'
 
 const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
+
+/** Старт события: 23 июля 2026, 00:00 (Екатеринбург, UTC+5) */
+const EVENT_START_MS = new Date('2026-07-23T00:00:00+05:00').getTime()
+
+const nowMs = ref(Date.now())
+let tick: ReturnType<typeof setInterval> | undefined
+
+const remainingMs = computed(() => Math.max(0, EVENT_START_MS - nowMs.value))
+
+const countdownParts = computed(() => {
+  const t = remainingMs.value
+  const sec = Math.floor(t / 1000)
+  const days = Math.floor(sec / 86400)
+  const hours = Math.floor((sec % 86400) / 3600)
+  const minutes = Math.floor((sec % 3600) / 60)
+  const seconds = sec % 60
+  return { days, hours, minutes, seconds }
+})
+
+const eventStarted = computed(() => remainingMs.value === 0)
+
+onMounted(() => {
+  tick = setInterval(() => {
+    nowMs.value = Date.now()
+  }, 1000)
+})
+
+onUnmounted(() => {
+  if (tick !== undefined) clearInterval(tick)
+})
 </script>
 
 <template>
@@ -19,10 +50,10 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
 
     <!-- Первый экран (hero + вступление) -->
     <div class="relative">
-      <!-- Hero: только картинка на всю ширину -->
+      <!-- Hero: картинка на всю ширину -->
       <section class="w-full relative z-0">
         <img
-          :src="img('main.png')"
+          :src="img('main.jpg')"
           alt="Уральский Бёрн"
           class="w-full h-auto max-h-[90vh] object-cover object-center block"
         />
@@ -32,11 +63,57 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
       <section class="px-4 py-16 md:py-24 border-b border-burn-border relative z-0">
         <div class="max-w-3xl mx-auto text-center space-y-6 relative z-20">
           <p class="text-lg text-burn-cream/85 leading-relaxed max-w-2xl mx-auto">
-            У подножия Уральского горного хребта, на границе между Азией и Европой, в сердце материка
-            мы строим на несколько дней место в духе бёрн-культуры — свободное от политики,
-            денежных отношений, ограничений на самовыражение и предвзятых суждений; место, где рады всем;
-            место, которое мы сами делаем таким, каким хотим его видеть.
+            У подножия Уральского горного хребта, на границе между Европой и Азией, в сердце материка
+            мы строим на несколько дней место, свободное от политики,
+            денежных отношений, ограничений на самовыражение и предвзятых суждений. Место, где рады всем. <br>
+            Место, которое мы сами сделаем таким, каким хотим его видеть.
           </p>
+
+          <div v-if="!eventStarted" class="space-y-3">
+            <p class="text-burn-cream/80 text-sm sm:text-base">
+              До старта:
+            </p>
+            <div
+              class="grid grid-cols-4 gap-1.5 sm:gap-2 max-w-[260px] sm:max-w-xs mx-auto"
+            >
+              <div class="rounded-md border border-burn-orange/35 bg-burn-black/50 px-0.5 py-1.5 sm:px-2 sm:py-2">
+                <div class="font-display text-lg sm:text-2xl text-burn-orange tabular-nums leading-none">
+                  {{ countdownParts.days }}
+                </div>
+                <div class="text-[9px] sm:text-[10px] text-burn-cream/60 mt-1 uppercase tracking-wide">
+                  дней
+                </div>
+              </div>
+              <div class="rounded-md border border-burn-orange/35 bg-burn-black/50 px-0.5 py-1.5 sm:px-2 sm:py-2">
+                <div class="font-display text-lg sm:text-2xl text-burn-orange tabular-nums leading-none">
+                  {{ String(countdownParts.hours).padStart(2, '0') }}
+                </div>
+                <div class="text-[9px] sm:text-[10px] text-burn-cream/60 mt-1 uppercase tracking-wide">
+                  часов
+                </div>
+              </div>
+              <div class="rounded-md border border-burn-orange/35 bg-burn-black/50 px-0.5 py-1.5 sm:px-2 sm:py-2">
+                <div class="font-display text-lg sm:text-2xl text-burn-orange tabular-nums leading-none">
+                  {{ String(countdownParts.minutes).padStart(2, '0') }}
+                </div>
+                <div class="text-[9px] sm:text-[10px] text-burn-cream/60 mt-1 uppercase tracking-wide">
+                  мин
+                </div>
+              </div>
+              <div class="rounded-md border border-burn-orange/35 bg-burn-black/50 px-0.5 py-1.5 sm:px-2 sm:py-2">
+                <div class="font-display text-lg sm:text-2xl text-burn-orange tabular-nums leading-none">
+                  {{ String(countdownParts.seconds).padStart(2, '0') }}
+                </div>
+                <div class="text-[9px] sm:text-[10px] text-burn-cream/60 mt-1 uppercase tracking-wide">
+                  сек
+                </div>
+              </div>
+            </div>
+          </div>
+          <p v-else class="font-display text-base sm:text-lg text-burn-orange">
+            Событие уже идёт — увидимся на площадке 🔥
+          </p>
+
           <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <!-- <RouterLink
               to="/onboarding"
@@ -349,7 +426,7 @@ const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
       <div class="max-w-2xl mx-auto text-center space-y-8">
         <h2 class="font-display text-3xl sm:text-4xl text-burn-cream">Присоединяйся</h2>
         <p class="text-burn-cream/85 text-lg">
-          Мы создали удобную систему обучения для всех желающих стать частью события. Здесь ты сможешь узнать о принципах бёрн-сообщества и правилах Уральского бёрна, а также о способах участия.
+          Мы создали удобную систему обучения для всех желающих стать частью события. Здесь ты сможешь узнать о принципах бёрн-сообщества и правилах Уральского Бёрна, а также о способах участия.
           Это своеобразный вайб-чек. Если ты с нами на одной волне, то в конце теста получишь ссылку на чат участников.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
