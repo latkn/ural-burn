@@ -32,17 +32,29 @@ jobs:
         working-directory: onboarding
         run: npm ci
 
+      # Без этого base остаётся "/" — на user.github.io/ИМЯ-РЕПО/ все /assets/* дают 404 и белый экран
+      - name: Base path for GitHub Pages
+        id: pages_base
+        env:
+          REPO_NAME: ${{ github.event.repository.name }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          VITE_BASE_URL_OVERRIDE: ${{ secrets.VITE_BASE_URL }}
+        run: |
+          if [ -n "$VITE_BASE_URL_OVERRIDE" ]; then
+            echo "base=$VITE_BASE_URL_OVERRIDE" >> "$GITHUB_OUTPUT"
+          elif [ "$REPO_NAME" = "${REPO_OWNER}.github.io" ]; then
+            echo "base=/" >> "$GITHUB_OUTPUT"
+          else
+            echo "base=/$REPO_NAME/" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build
         working-directory: onboarding
         env:
-          # Обязательно добавь в Settings → Secrets and variables → Actions
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          # Опционально (иначе дефолт из кода)
           VITE_CHAT_LINK: ${{ secrets.VITE_CHAT_LINK }}
-          # Только если сайт на Pages будет не с корня, а вида user.github.io/ИМЯ-РЕПО/
-          # Тогда задай секрет, например: /ИМЯ-РЕПО/ (со слэшами)
-          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+          VITE_BASE_URL: ${{ steps.pages_base.outputs.base }}
         run: npm run build
 
       # GitHub Pages отдаёт 404.html при несуществующем пути — нужно для Vue Router (history)
