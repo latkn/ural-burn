@@ -1,5 +1,5 @@
 # Сборка onboarding (Vite + Vue) и публикация на GitHub Pages.
-# Netlify от этого не ломается — отдельный деплой по тому же пушу.
+# Один job = ровно один артефакт github-pages (иначе deploy-pages падает с "Multiple artifacts").
 name: Deploy to GitHub Pages
 
 on:
@@ -17,8 +17,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -32,7 +35,6 @@ jobs:
         working-directory: onboarding
         run: npm ci
 
-      # Без этого base остаётся "/" — на user.github.io/ИМЯ-РЕПО/ все /assets/* дают 404 и белый экран
       - name: Base path for GitHub Pages
         id: pages_base
         env:
@@ -57,7 +59,6 @@ jobs:
           VITE_BASE_URL: ${{ steps.pages_base.outputs.base }}
         run: npm run build
 
-      # GitHub Pages отдаёт 404.html при несуществующем пути — нужно для Vue Router (history)
       - name: SPA fallback
         working-directory: onboarding
         run: cp dist/index.html dist/404.html
@@ -66,12 +67,5 @@ jobs:
         with:
           path: onboarding/dist
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
