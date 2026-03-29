@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useOnboardingState } from '@/composables/useOnboardingState'
 import { chapters } from '@/data/chapters'
+import { shuffleIndices } from '@/utils/shuffleQuizOptions'
 import FormattedBody from '@/components/FormattedBody.vue'
 import PrinciplesBlocks from '@/components/PrinciplesBlocks.vue'
 
@@ -14,6 +15,8 @@ const phase = ref<'read' | 'quiz'>('read')
 const quizQuestionIndex = ref(0)
 /** Ответы по текущей главе: индекс варианта или null, пока не выбран */
 const quizAnswers = ref<(number | null)[]>([])
+/** Для текущей главы: порядок индексов вариантов по каждому вопросу мини-квиза */
+const chapterOptionOrders = ref<number[][]>([])
 const wrongOnce = ref(false)
 
 const chapter = computed(() => chapters[chapterIndex.value])
@@ -45,6 +48,7 @@ function goToQuiz() {
   quizQuestionIndex.value = 0
   wrongOnce.value = false
   quizAnswers.value = Array.from({ length: chapter.value.miniQuiz.length }, () => null)
+  chapterOptionOrders.value = chapter.value.miniQuiz.map((q) => shuffleIndices(q.options.length))
 }
 
 function goNextQuiz() {
@@ -116,22 +120,22 @@ function nextChapter() {
         <p v-if="wrongOnce" class="mb-4 text-base text-amber-400">Попробуй ещё раз.</p>
         <ul class="space-y-3">
           <li
-            v-for="(opt, i) in currentQuizQuestion.options"
-            :key="i"
+            v-for="origIdx in chapterOptionOrders[quizQuestionIndex]"
+            :key="origIdx"
             class="flex items-start gap-3"
           >
             <input
-              :id="`cq-${chapterIndex}-${quizQuestionIndex}-${i}`"
+              :id="`cq-${chapterIndex}-${quizQuestionIndex}-${origIdx}`"
               v-model="currentAnswer"
               type="radio"
-              :value="i"
+              :value="origIdx"
               class="mt-1.5 h-4 w-4 shrink-0"
             />
             <label
-              :for="`cq-${chapterIndex}-${quizQuestionIndex}-${i}`"
+              :for="`cq-${chapterIndex}-${quizQuestionIndex}-${origIdx}`"
               class="cursor-pointer text-lg leading-relaxed text-burn-cream/90"
             >
-              <FormattedBody :text="opt" inline />
+              <FormattedBody :text="currentQuizQuestion.options[origIdx]" inline />
             </label>
           </li>
         </ul>

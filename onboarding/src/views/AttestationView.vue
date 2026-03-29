@@ -8,6 +8,7 @@ import {
   attestationKnowledgeThreshold,
   agreementItems,
 } from '@/data/attestationQuestions'
+import { shuffleIndices } from '@/utils/shuffleQuizOptions'
 import FormattedBody from '@/components/FormattedBody.vue'
 
 const router = useRouter()
@@ -23,6 +24,11 @@ const kIndex = ref(0)
 const knowledgeFailure = ref(false)
 
 const agreementChecked = ref(agreementItems.map(() => false))
+
+/** Порядок вариантов по вопросам; в answers — исходные индексы (как ждёт бэкенд) */
+const knowledgeOptionOrder = ref(
+  knowledgeQuestions.map((q) => shuffleIndices(q.options.length))
+)
 
 const progress = computed(() => `Вопрос ${kIndex.value + 1} из ${totalKnowledge}`)
 
@@ -99,6 +105,7 @@ function retryKnowledge() {
   kIndex.value = 0
   answers.value = Array.from({ length: totalKnowledge }, () => null)
   knowledgeFailure.value = false
+  knowledgeOptionOrder.value = knowledgeQuestions.map((q) => shuffleIndices(q.options.length))
 }
 </script>
 
@@ -132,19 +139,19 @@ function retryKnowledge() {
         </div>
         <ul class="space-y-3">
           <li
-            v-for="(opt, i) in knowledgeQuestions[kIndex].options"
-            :key="i"
+            v-for="origIdx in knowledgeOptionOrder[kIndex]"
+            :key="origIdx"
             class="flex items-start gap-3"
           >
             <input
-              :id="`k-${kIndex}-${i}`"
+              :id="`k-${kIndex}-${origIdx}`"
               v-model="currentAnswer"
               type="radio"
-              :value="i"
+              :value="origIdx"
               class="mt-1.5 h-4 w-4 shrink-0"
             />
-            <label :for="`k-${kIndex}-${i}`" class="cursor-pointer text-lg leading-relaxed text-burn-cream/90">
-              <FormattedBody :text="opt" inline />
+            <label :for="`k-${kIndex}-${origIdx}`" class="cursor-pointer text-lg leading-relaxed text-burn-cream/90">
+              <FormattedBody :text="knowledgeQuestions[kIndex].options[origIdx]" inline />
             </label>
           </li>
         </ul>

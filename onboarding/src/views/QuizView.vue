@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useOnboardingState } from '@/composables/useOnboardingState'
 import { quizQuestions } from '@/data/quizQuestions'
+import { shuffleIndices } from '@/utils/shuffleQuizOptions'
 import FormattedBody from '@/components/FormattedBody.vue'
 
 const router = useRouter()
@@ -11,6 +12,9 @@ const { setQuizPassed } = useOnboardingState()
 const current = ref(0)
 const selected = ref<number | null>(null)
 const wrongAnswer = ref(false)
+
+/** Порядок отображения вариантов (индексы в исходном массиве); ответ хранится как исходный индекс */
+const optionOrder = ref(quizQuestions.map((q) => shuffleIndices(q.options.length)))
 
 const total = quizQuestions.length
 const progress = computed(() => `${current.value + 1} / ${total}`)
@@ -46,19 +50,19 @@ function submit() {
       <p v-if="wrongAnswer" class="mb-4 text-base text-red-400">Неверно. Выбери другой вариант.</p>
       <ul class="space-y-3">
         <li
-          v-for="(opt, i) in quizQuestions[current].options"
-          :key="i"
+          v-for="origIdx in optionOrder[current]"
+          :key="origIdx"
           class="flex items-start gap-3"
         >
           <input
-            :id="`opt-${current}-${i}`"
+            :id="`opt-${current}-${origIdx}`"
             v-model="selected"
             type="radio"
-            :value="i"
+            :value="origIdx"
             class="mt-1.5 h-4 w-4 shrink-0"
           />
-          <label :for="`opt-${current}-${i}`" class="cursor-pointer text-lg leading-relaxed text-burn-cream/90">
-            <FormattedBody :text="opt" inline />
+          <label :for="`opt-${current}-${origIdx}`" class="cursor-pointer text-lg leading-relaxed text-burn-cream/90">
+            <FormattedBody :text="quizQuestions[current].options[origIdx]" inline />
           </label>
         </li>
       </ul>
