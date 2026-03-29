@@ -167,7 +167,7 @@ onUnmounted(() => {
                   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 58%, transparent 100%);
                 "
               />
-              <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-burn-card via-burn-card/65 to-transparent pointer-events-none"></div>
+              <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t  via-burn-card/65 to-transparent pointer-events-none"></div>
             </div>
             <div class="px-5 pb-5 pt-3 h-40 flex flex-col">
               <h3 class="font-display text-xl text-burn-cream min-h-[32px]">Живые истории</h3>
@@ -188,7 +188,7 @@ onUnmounted(() => {
                   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 58%, transparent 100%);
                 "
               />
-              <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-burn-card via-burn-card/65 to-transparent pointer-events-none"></div>
+              <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t  via-burn-card/65 to-transparent pointer-events-none"></div>
             </div>
             <div class="px-5 pb-5 pt-3 h-40 flex flex-col">
               <h3 class="font-display text-xl text-burn-cream min-h-[32px]">Город-очаг</h3>
@@ -209,7 +209,7 @@ onUnmounted(() => {
                   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 58%, transparent 100%);
                 "
               />
-              <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-burn-card via-burn-card/65 to-transparent pointer-events-none"></div>
+              <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t  via-burn-card/65 to-transparent pointer-events-none"></div>
             </div>
             <div class="px-5 pb-5 pt-3 h-40 flex flex-col">
               <h3 class="font-display text-xl text-burn-cream min-h-[32px]">Твоё наследие</h3>
@@ -303,118 +303,130 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <!-- 7 кэмпов -->
-    <section class="px-4 py-16 md:py-24 border-t border-burn-border">
-      <div class="max-w-5xl mx-auto">
-        <h2 class="font-display text-3xl sm:text-4xl text-burn-cream mb-8">7 кэмпов</h2>
-        <ul class="space-y-6">
-          <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card overflow-hidden">
-            <div class="w-32 sm:w-40 shrink-0 aspect-[4/3]">
+    <!-- 7 кэмпов — та же сетка и карточки, что в блоке «Наследие» -->
+    <section class="px-4 py-16 md:py-24 border-t border-burn-border bg-burn-dark/40">
+      <div class="max-w-5xl mx-auto space-y-8">
+        <p class="text-burn-orange font-medium tracking-wide uppercase text-sm">
+          Wild Tribe — первый Уральский бёрн
+        </p>
+        <h2 class="font-display text-3xl sm:text-4xl text-burn-cream">7 кэмпов</h2>
+
+        <div class="grid sm:grid-cols-3 gap-4 items-stretch">
+          <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
+            <div class="relative aspect-[16/10] shrink-0 overflow-hidden">
               <img
                 :src="img('wildtribe.png')"
                 alt="Flame Tribe"
-                class="w-full h-full object-cover"
+                class="absolute inset-0 h-full w-full object-cover object-[50%_48%]"
               />
             </div>
-            <div class="p-5 flex-1 min-w-0">
-              <span class="text-burn-orange font-medium">Flame Tribe</span>
-              <span class="block text-burn-cream/85 mt-1">
+            <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
+              <h3 class="font-display text-xl text-burn-cream leading-snug shrink-0">Flame Tribe</h3>
+              <p class="text-burn-cream/80 text-sm leading-relaxed">
                 Дикий, раскачивающий не только пространство, но и материю, танцпол в дремучей тайге,
                 среди мхов, елей и лишайников.
-              </span>
+              </p>
             </div>
-          </li>
-          <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card overflow-hidden">
-            <div class="w-32 sm:w-40 shrink-0 aspect-[4/3]">
+          </article>
+
+          <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
+            <div class="relative aspect-[16/10] shrink-0 overflow-hidden">
               <img
                 :src="img('fantastic-love-camp.jpg')"
                 alt="Fantastic Love"
-                class="w-full h-full object-cover"
+                class="absolute inset-0 h-full w-full object-cover object-[50%_45%]"
               />
             </div>
-            <div class="p-5 flex-1 min-w-0">
-              <span class="text-burn-orange font-medium">Fantastic Love</span>
-              <span class="block text-burn-cream/85 mt-1">Шатер Заботы и бесконечного тепла.</span>
+            <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
+              <h3 class="font-display text-xl text-burn-cream leading-snug shrink-0">Fantastic Love</h3>
+              <p class="text-burn-cream/80 text-sm leading-relaxed">
+                Шатер Заботы и бесконечного тепла.
+              </p>
             </div>
-          </li>
-          <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card overflow-hidden">
-            <div class="w-32 sm:w-40 shrink-0 aspect-[4/3]">
+          </article>
+
+          <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
+            <div class="relative aspect-[16/10] shrink-0 overflow-hidden">
               <img
                 :src="img('camp-bar-chud-beloglazaya.jpg')"
                 alt="Чудь Белоглазая"
-                class="w-full h-full object-cover"
+                class="absolute inset-0 h-full w-full object-cover object-[50%_42%]"
               />
             </div>
-            <div class="p-5 flex-1 min-w-0">
-              <span class="text-burn-orange font-medium">Чудь Белоглазая</span>
-              <span class="block text-burn-cream/85 mt-1">
+            <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
+              <h3 class="font-display text-xl text-burn-cream leading-snug shrink-0">Чудь Белоглазая</h3>
+              <p class="text-burn-cream/80 text-sm leading-relaxed">
                 Шаманский этнический бар с настойками, горячими перфомансами и практиками.
-              </span>
+              </p>
             </div>
-          </li>
-          <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card overflow-hidden">
-            <div class="w-32 sm:w-40 shrink-0 aspect-[4/3]">
+          </article>
+
+          <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
+            <div class="relative aspect-[16/10] shrink-0 overflow-hidden">
               <img
                 :src="img('secret_camp.jpg')"
                 alt="Secret Camp"
-                class="w-full h-full object-cover"
+                class="absolute inset-0 h-full w-full object-cover object-[50%_46%]"
               />
             </div>
-            <div class="p-5 flex-1 min-w-0">
-              <span class="text-burn-orange font-medium">Secret Camp</span>
-              <span class="block text-burn-cream/85 mt-1">
+            <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
+              <h3 class="font-display text-xl text-burn-cream leading-snug shrink-0">Secret Camp</h3>
+              <p class="text-burn-cream/80 text-sm leading-relaxed">
                 Спрятанный в тайге — так же непросто найти гармонию и покой. Для тех, кто нашёл —
                 откровения и новые инсайты.
-              </span>
+              </p>
             </div>
-          </li>
-          <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card overflow-hidden">
-            <div class="w-32 sm:w-40 shrink-0 aspect-[4/3]">
+          </article>
+
+          <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
+            <div class="relative aspect-[16/10] shrink-0 overflow-hidden">
               <img
                 :src="img('banya.png')"
                 alt="Банные церемонии"
-                class="w-full h-full object-cover"
+                class="absolute inset-0 h-full w-full object-cover object-[50%_44%]"
               />
             </div>
-            <div class="p-5 flex-1 min-w-0">
-              <span class="text-burn-orange font-medium">Банные церемонии</span>
-              <span class="block text-burn-cream/85 mt-1">
+            <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
+              <h3 class="font-display text-xl text-burn-cream leading-snug shrink-0">Банные церемонии</h3>
+              <p class="text-burn-cream/80 text-sm leading-relaxed">
                 Теплые, мягкие, согревающие церемонии и горячие чаны под величественными деревьями.
-              </span>
+              </p>
             </div>
-          </li>
-          <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card overflow-hidden">
-            <div class="w-32 sm:w-40 shrink-0 aspect-[4/3]">
+          </article>
+
+          <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
+            <div class="relative aspect-[16/10] shrink-0 overflow-hidden">
               <img
                 :src="img('tundra.jpg')"
                 alt="Tundra Club"
-                class="w-full h-full object-cover"
+                class="absolute inset-0 h-full w-full object-cover object-[50%_43%]"
               />
             </div>
-            <div class="p-5 flex-1 min-w-0">
-              <span class="text-burn-orange font-medium">Tundra Club</span>
-              <span class="block text-burn-cream/85 mt-1">
+            <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
+              <h3 class="font-display text-xl text-burn-cream leading-snug shrink-0">Tundra Club</h3>
+              <p class="text-burn-cream/80 text-sm leading-relaxed">
                 Мощный шатер света, дыма и плотного звука с мини-баром.
-              </span>
+              </p>
             </div>
-          </li>
-          <li class="flex gap-4 rounded-xl border border-burn-border bg-burn-card overflow-hidden">
-            <div class="w-32 sm:w-40 shrink-0 aspect-[4/3]">
+          </article>
+
+          <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
+            <div class="relative aspect-[16/10] shrink-0 overflow-hidden">
               <img
                 :src="img('camp_brothers_chicko.jpg')"
                 alt="Братья Цыплята"
-                class="w-full h-full object-cover"
+                class="absolute inset-0 h-full w-full object-cover object-[50%_40%]"
               />
             </div>
-            <div class="p-5 flex-1 min-w-0">
-              <span class="text-burn-orange font-medium">Братья Цыплята</span>
-              <span class="block text-burn-cream/85 mt-1">
+            <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
+              <h3 class="font-display text-xl text-burn-cream leading-snug shrink-0">Братья Цыплята</h3>
+              <p class="text-burn-cream/80 text-sm leading-relaxed">
                 НИИ комплексного изучения воздействия температурного режима на табачно-глицериновые
                 смеси, парогенерационные процессы и ферментированные травы с H₂O.
-              </span>
+              </p>
             </div>
-          </li>
-        </ul>
+          </article>
+        </div>
       </div>
     </section>
 
