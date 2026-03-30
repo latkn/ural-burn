@@ -38,7 +38,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 <template>
   <section class="px-4 py-16 border-t border-burn-border">
     <div class="max-w-5xl mx-auto">
-      <h2 class="font-display text-2xl text-burn-cream mb-6">Фотографии</h2>
+      <h2 class="font-display text-2xl text-burn-cream mb-6">Фотографии c Wild Tribe 2025</h2>
       <p v-if="galleryUrls.length === 0" class="text-burn-muted text-sm">
         Добавьте изображения в папку <code class="bg-burn-card px-1 rounded">src/assets/gallery</code> — они появятся здесь.
       </p>

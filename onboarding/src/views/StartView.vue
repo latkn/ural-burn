@@ -25,6 +25,21 @@ function choose(path: 'newcomer' | 'experienced') {
     <h1 class="font-display text-3xl sm:text-4xl text-burn-cream">Принципы бёрн-сообщества</h1>
     <FormattedBody :text="introText" />
 
+    <div
+      class="rounded-xl border border-burn-orange/40 bg-burn-orange/10 px-4 py-3 sm:flex sm:items-center sm:gap-4"
+      role="note"
+    >
+      <div class="flex items-baseline gap-2 sm:shrink-0">
+        <span class="font-display text-2xl text-burn-orange tabular-nums leading-none">~20</span>
+        <span class="text-sm font-medium text-burn-cream/90">мин</span>
+      </div>
+      <p class="mt-2 text-sm leading-snug text-burn-cream/80 sm:mt-0">
+        <span class="font-medium text-burn-cream/90">Среднее время прохождения</span>
+        — теория и тест для новичков. Если идёшь сразу к аттестации, обычно хватает
+        <span class="whitespace-nowrap text-burn-cream/90">~7 мин</span>.
+      </p>
+    </div>
+
     <p class="text-lg font-semibold text-burn-cream">Как тебе удобнее?</p>
     <div class="grid gap-4 sm:grid-cols-2">
       <button
