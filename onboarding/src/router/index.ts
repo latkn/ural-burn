@@ -33,6 +33,12 @@ const router = createRouter({
       meta: { title: '10 принципов подробно' },
     },
     {
+      path: '/how-to-make-camp',
+      name: 'how-to-make-camp',
+      component: () => import('@/views/HowToMakeCampView.vue'),
+      meta: { title: 'Как сделать кемп' },
+    },
+    {
       path: '/info',
       name: 'info',
       component: () => import('@/views/InfoView.vue'),

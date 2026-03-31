@@ -493,9 +493,13 @@ onUnmounted(() => {
     <!-- Мини-футер -->
     <footer class="border-t border-burn-border py-6 px-4 text-center text-sm text-burn-muted">
       <p>Уральский бёрн. Никакой коммерции. Участие и Сообщество.</p>
-      <p class="mt-2">
+      <p class="mt-2 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
         <RouterLink to="/principles" class="underline underline-offset-2 hover:text-burn-cream">
           10 принципов
+        </RouterLink>
+        <span class="text-burn-muted/80" aria-hidden="true">·</span>
+        <RouterLink to="/how-to-make-camp" class="underline underline-offset-2 hover:text-burn-cream">
+          Как сделать кемп
         </RouterLink>
       </p>
     </footer>

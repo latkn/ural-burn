@@ -4,7 +4,9 @@ import { computed } from 'vue'
 
 const route = useRoute()
 const isLanding = computed(() => route.name === 'landing')
-const isWideOnboardingPage = computed(() => route.name === 'principles')
+const isWideOnboardingPage = computed(
+  () => route.name === 'principles' || route.name === 'how-to-make-camp'
+)
 </script>
 
 <template>
@@ -14,7 +16,6 @@ const isWideOnboardingPage = computed(() => route.name === 'principles')
       <header class="border-b border-burn-border py-4 px-4">
         <div class="container mx-auto flex items-center justify-between">
           <RouterLink to="/" class="font-display text-xl text-burn-cream">Уральский бёрн</RouterLink>
-          <span class="text-sm text-burn-muted">Онбординг</span>
         </div>
       </header>
       <main
