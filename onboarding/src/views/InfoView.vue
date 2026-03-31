@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useOnboardingState } from '@/composables/useOnboardingState'
 import { chapters } from '@/data/chapters'
@@ -85,6 +85,15 @@ function goBackQuiz() {
 function nextChapter() {
   goToQuiz()
 }
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+watch([chapterIndex, phase, quizQuestionIndex], async () => {
+  await nextTick()
+  scrollToTop()
+})
 </script>
 
 <template>
