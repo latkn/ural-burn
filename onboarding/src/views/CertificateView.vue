@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
 import { useOnboardingState } from '@/composables/useOnboardingState'
 const router = useRouter()
@@ -9,6 +9,8 @@ const certRef = ref<HTMLElement | null>(null)
 const holderName = ref('')
 const downloading = ref(false)
 const pdfError = ref<string | null>(null)
+const copyStatus = ref<'idle' | 'success' | 'error'>('idle')
+let copyResetTimer: ReturnType<typeof setTimeout> | null = null
 
 const code = computed(() => state.value.certificateCode ?? '')
 const passedAt = computed(() => {
@@ -26,6 +28,7 @@ const passedAt = computed(() => {
 })
 
 const displayName = computed(() => holderName.value.trim() || '________________')
+const hasCompletedTraining = computed(() => state.value.certificatePath === 'newcomer')
 
 const canDownload = computed(() => holderName.value.trim().length >= 2)
 
@@ -66,6 +69,30 @@ async function onDownloadPdf() {
     downloading.value = false
   }
 }
+
+async function onCopyCode() {
+  if (!code.value.trim()) return
+  try {
+    await navigator.clipboard.writeText(code.value)
+    copyStatus.value = 'success'
+  } catch {
+    copyStatus.value = 'error'
+  }
+
+  if (copyResetTimer) {
+    clearTimeout(copyResetTimer)
+  }
+  copyResetTimer = setTimeout(() => {
+    copyStatus.value = 'idle'
+    copyResetTimer = null
+  }, 1800)
+}
+
+onUnmounted(() => {
+  if (copyResetTimer) {
+    clearTimeout(copyResetTimer)
+  }
+})
 </script>
 
 <template>
@@ -96,7 +123,26 @@ async function onDownloadPdf() {
 
     <div class="rounded-xl border border-burn-orange/40 bg-burn-dark/60 p-4">
       <p class="text-sm text-burn-cream/70">Уникальный код для проверки</p>
-      <p class="font-mono text-xl font-semibold tracking-wide text-burn-orange break-all">{{ code }}</p>
+      <div class="mt-1 flex flex-wrap items-center gap-2">
+        <p class="font-mono text-xl font-semibold tracking-wide text-burn-orange break-all">{{ code }}</p>
+        <div class="inline-flex items-center gap-2">
+          <button
+            type="button"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-burn-orange/60 bg-burn-orange/10 text-burn-orange transition hover:bg-burn-orange/20 hover:border-burn-orange"
+            title="Скопировать код"
+            aria-label="Скопировать код"
+            @click="onCopyCode"
+          >
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="11" height="11" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+          </button>
+          <p class="text-xs text-burn-muted min-w-24">
+            {{ copyStatus === 'success' ? 'Скопировано' : copyStatus === 'error' ? 'Ошибка' : '' }}
+          </p>
+        </div>
+      </div>
       <p class="mt-3 text-xs text-burn-muted leading-relaxed">
         Код выдан сервером после успешной аттестации и записан в базу (без имени) — организаторы могут проверить его в админке.
       </p>
@@ -150,7 +196,11 @@ async function onDownloadPdf() {
           </p>
           <div class="mx-auto mt-8 h-px w-48 bg-gradient-to-r from-transparent via-burn-orange/80 to-transparent" />
           <p class="mt-6 text-sm leading-relaxed text-burn-cream/80">
-            завершил(а) программу онлайн-онбординга и подтвердил(а) знание основ бёрн-культуры и правил сообщества.
+            {{
+              hasCompletedTraining
+                ? 'прошёл(ла) обучение и подтвердил(а) знание основ бёрн-культуры и правил сообщества.'
+                : 'подтвердил(а) знание основ бёрн-культуры и правил сообщества.'
+            }}
           </p>
         </div>
 

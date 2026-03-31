@@ -6,6 +6,8 @@ export type OnboardingPath = 'newcomer' | 'experienced'
 
 export interface OnboardingState {
   path: OnboardingPath | null
+  /** Фактический путь, с которым выдан сертификат (фиксируется при submit_attestation). */
+  certificatePath: OnboardingPath | null
   infoSeen: boolean
   quizPassed: boolean
   attestationPassed: boolean
@@ -25,6 +27,7 @@ function loadState(): OnboardingState {
       const attestationPassed = Boolean(parsed.attestationPassed) && Boolean(code)
       const result: OnboardingState = {
         path: parsed.path ?? null,
+        certificatePath: parsed.certificatePath ?? null,
         infoSeen: parsed.infoSeen ?? false,
         quizPassed: parsed.quizPassed ?? false,
         attestationPassed,
@@ -57,6 +60,7 @@ function loadState(): OnboardingState {
   }
   return {
     path: null,
+    certificatePath: null,
     infoSeen: false,
     quizPassed: false,
     attestationPassed: false,
@@ -93,12 +97,17 @@ export function useOnboardingState() {
   }
 
   /** Вызывать только после успешного ответа RPC submit_attestation */
-  const setAttestationFromServer = (payload: { certificateCode: string; attestationPassedAt: string }) => {
+  const setAttestationFromServer = (payload: {
+    certificateCode: string
+    attestationPassedAt: string
+    certificatePath: OnboardingPath | null
+  }) => {
     state.value = {
       ...state.value,
       attestationPassed: true,
       attestationPassedAt: payload.attestationPassedAt,
       certificateCode: payload.certificateCode.trim(),
+      certificatePath: payload.certificatePath,
     }
     saveState(state.value)
   }
@@ -119,6 +128,7 @@ export function useOnboardingState() {
   const reset = () => {
     state.value = {
       path: null,
+      certificatePath: null,
       infoSeen: false,
       quizPassed: false,
       attestationPassed: false,

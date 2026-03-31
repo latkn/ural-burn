@@ -8,6 +8,7 @@
 - `supabase/migrations/003_burn_experience.sql`
 - `supabase/migrations/004_certificate_codes.sql` — коды сертификатов онбординга (без ПДн) и проверка в админке
 - `supabase/migrations/005_submit_attestation.sql` — аттестация на сервере (`submit_attestation`), выдача кода только после проверки ответов; публичный `register_certificate_code` отключён
+- `supabase/migrations/007_certificate_codes_onboarding_path.sql` — запись типа прохождения (`newcomer`/`experienced`) вместе с кодом сертификата
 
 ## 1) Создайте админ-пользователя в Supabase Auth
 В Supabase Dashboard:
@@ -41,5 +42,5 @@ values ('<PASTE_AUTH_USER_UUID>');
 
 ## Проверка кода сертификата онбординга
 В админке сверху есть блок **«Проверка кода сертификата»**: введите код в формате `UB-ГГГГ-XXXXXX` (как в PDF участника).
-В таблице `certificate_codes` хранятся только код и дата регистрации кода — без имён.
+В таблице `certificate_codes` хранятся код, дата регистрации и тип прохождения (`onboarding_path`) — без имён.
 

@@ -12,7 +12,7 @@ import { shuffleIndices } from '@/utils/shuffleQuizOptions'
 import FormattedBody from '@/components/FormattedBody.vue'
 
 const router = useRouter()
-const { setAttestationFromServer } = useOnboardingState()
+const { state, setAttestationFromServer } = useOnboardingState()
 
 const submitLoading = ref(false)
 const submitError = ref<string | null>(null)
@@ -88,6 +88,7 @@ async function submitAgreement() {
   const res = await submitAttestation({
     knowledgeAnswers: answers.value as number[],
     agreementAll: true,
+    onboardingPath: state.value.path,
   })
   submitLoading.value = false
   if (!res.ok) {
@@ -97,6 +98,7 @@ async function submitAgreement() {
   setAttestationFromServer({
     certificateCode: res.certificate_code,
     attestationPassedAt: res.attestation_passed_at,
+    certificatePath: state.value.path,
   })
   await router.push({ name: 'certificate' })
 }
@@ -118,7 +120,6 @@ function retryKnowledge() {
         <strong class="font-semibold text-burn-cream">Тест знаний.</strong>
         Один правильный ответ на каждый вопрос. Для прохождения нужно
         <strong class="font-semibold text-burn-cream">100% правильных ответов</strong> — иначе сертификат не выдаётся.
-        Можно вернуться к предыдущим вопросам и изменить ответ;
       </p>
 
       <div v-if="knowledgeFailure" class="rounded-xl border border-red-500/50 bg-red-500/10 p-6 sm:p-8">

@@ -20,6 +20,7 @@ export type SubmitAttestationResult =
 export async function submitAttestation(params: {
   knowledgeAnswers: number[]
   agreementAll: boolean
+  onboardingPath: 'newcomer' | 'experienced' | null
 }): Promise<SubmitAttestationResult> {
   if (!supabase) {
     return {
@@ -31,6 +32,7 @@ export async function submitAttestation(params: {
   const { data, error } = await supabase.rpc('submit_attestation', {
     p_knowledge_answers: params.knowledgeAnswers,
     p_agreement_all: params.agreementAll,
+    p_onboarding_path: params.onboardingPath,
   })
   if (error) {
     return {
