@@ -134,6 +134,36 @@ onUnmounted(() => {
       </section>
     </div>
 
+    <section class="px-4 py-16 md:py-20 border-t border-burn-border">
+      <div class="max-w-5xl mx-auto">
+        <div class="overflow-hidden rounded-2xl border border-burn-orange/30 bg-burn-card">
+          <div class="grid gap-0 md:grid-cols-2">
+            <div class="relative min-h-[17rem] md:min-h-[22rem]">
+              <img
+                :src="img('welcome_home.png')"
+                alt="Добро пожаловать домой"
+                class="absolute inset-0 h-full w-full object-cover object-center"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-burn-black/35 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-burn-black/15"></div>
+            </div>
+            <div class="p-5 sm:p-7">
+              <h2 class="font-display text-3xl sm:text-4xl text-burn-cream">Добро пожаловать домой</h2>
+              <p class="mt-4 text-lg leading-relaxed text-burn-cream/90 sm:text-xl">
+                Дом - это не точка на карте и не даты в календаре. Дом рождается в отношениях между людьми:
+                когда мы видим друг друга чаще, держим связь между событиями и продолжаем культуру взаимной
+                заботы круглый год.
+              </p>
+              <p class="mt-4 text-lg leading-relaxed text-burn-cream/90 sm:text-xl">
+                Помимо личной и профессиональной есть еще одна социальная жизнь - та, которую человек выбирает
+                сам. Для многих это и есть бёрн-движение: пространство, где время проживается плотнее, а жизнь
+                становится шире и глубже. Где можно примерить любую роль и реализовать самое безумное желание.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Уральский Бёрн 2026 — Наследие -->
     <section class="px-4 py-16 md:py-24 border-t border-burn-border bg-burn-dark/40">
       <div class="max-w-5xl mx-auto space-y-8">
@@ -462,7 +492,12 @@ onUnmounted(() => {
 
     <!-- Мини-футер -->
     <footer class="border-t border-burn-border py-6 px-4 text-center text-sm text-burn-muted">
-      Уральский бёрн. Никакой коммерции. Участие и Сообщество.
+      <p>Уральский бёрн. Никакой коммерции. Участие и Сообщество.</p>
+      <p class="mt-2">
+        <RouterLink to="/principles" class="underline underline-offset-2 hover:text-burn-cream">
+          10 принципов
+        </RouterLink>
+      </p>
     </footer>
   </div>
 </template>

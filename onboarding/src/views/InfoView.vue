@@ -5,6 +5,7 @@ import { useOnboardingState } from '@/composables/useOnboardingState'
 import { chapters } from '@/data/chapters'
 import { shuffleIndices } from '@/utils/shuffleQuizOptions'
 import FormattedBody from '@/components/FormattedBody.vue'
+import ExpandedPrinciplesBlocks from '@/components/ExpandedPrinciplesBlocks.vue'
 import PrinciplesBlocks from '@/components/PrinciplesBlocks.vue'
 
 const router = useRouter()
@@ -20,6 +21,7 @@ const chapterOptionOrders = ref<number[][]>([])
 const wrongOnce = ref(false)
 
 const chapter = computed(() => chapters[chapterIndex.value])
+const isTenPrinciplesChapter = computed(() => chapter.value.id === 'ten-principles')
 const totalChapters = chapters.length
 const progress = computed(() => `${chapterIndex.value + 1} / ${totalChapters}`)
 
@@ -92,7 +94,11 @@ function nextChapter() {
     <template v-if="phase === 'read'">
       <h1 class="font-display text-3xl sm:text-4xl text-burn-cream">{{ chapter.title }}</h1>
       <FormattedBody :text="chapter.body" />
-      <PrinciplesBlocks v-if="chapter.principleBlocks?.length" :blocks="chapter.principleBlocks" />
+      <ExpandedPrinciplesBlocks v-if="isTenPrinciplesChapter" />
+      <PrinciplesBlocks
+        v-else-if="chapter.principleBlocks?.length"
+        :blocks="chapter.principleBlocks"
+      />
       <div v-if="chapter.bodyAfterPrinciples" class="mt-8">
         <FormattedBody :text="chapter.bodyAfterPrinciples" />
       </div>
@@ -110,8 +116,7 @@ function nextChapter() {
     <template v-else>
       <h2 class="font-display text-2xl sm:text-3xl text-burn-cream">Проверка: {{ chapter.title }}</h2>
       <p class="text-lg leading-relaxed text-burn-cream/85">
-        Выбери правильный ответ, чтобы продолжить. Можно вернуться к предыдущим вопросам; дальше без ответа на текущий вопрос не
-        пройти.
+        Выбери правильный ответ, чтобы продолжить.
       </p>
       <div class="rounded-xl border border-burn-border bg-burn-card p-6 sm:p-8">
         <div class="mb-5 text-xl font-semibold leading-snug text-burn-cream">

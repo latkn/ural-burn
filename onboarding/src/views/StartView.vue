@@ -36,7 +36,7 @@ function choose(path: 'newcomer' | 'experienced') {
       <p class="mt-2 text-sm leading-snug text-burn-cream/80 sm:mt-0">
         <span class="font-medium text-burn-cream/90">Среднее время прохождения</span>
         — теория и тест для новичков. Если идёшь сразу к аттестации, обычно хватает
-        <span class="whitespace-nowrap text-burn-cream/90">~7 мин</span>.
+        <span class="whitespace-nowrap text-burn-cream/90">~5 мин</span>.
       </p>
     </div>
 

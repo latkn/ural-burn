@@ -27,6 +27,12 @@ const router = createRouter({
       meta: { title: 'Начало' },
     },
     {
+      path: '/principles',
+      name: 'principles',
+      component: () => import('@/views/PrinciplesView.vue'),
+      meta: { title: '10 принципов подробно' },
+    },
+    {
       path: '/info',
       name: 'info',
       component: () => import('@/views/InfoView.vue'),
