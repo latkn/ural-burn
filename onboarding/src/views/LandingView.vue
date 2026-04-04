@@ -3,6 +3,9 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import GallerySection from '@/components/GallerySection.vue'
 import EmbersOverlay from '@/components/EmbersOverlay.vue'
+import { useOnboardingState } from '@/composables/useOnboardingState'
+
+const { canAccessCertificate } = useOnboardingState()
 
 const img = (path: string) => `${import.meta.env.BASE_URL}images/${path}`
 
@@ -478,14 +481,13 @@ onUnmounted(() => {
           >
             Перейти
           </RouterLink>
-          <!-- <a
-            :href="TG_GROUP"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center rounded-xl border-2 border-burn-border px-8 py-4 font-semibold text-burn-cream transition hover:border-burn-orange/50"
+          <RouterLink
+            v-if="canAccessCertificate"
+            to="/certificate"
+            class="inline-flex items-center justify-center rounded-xl border-2 border-burn-border px-8 py-4 font-semibold text-burn-cream transition hover:border-burn-orange/50 hover:bg-burn-orange/10"
           >
-            Группа в Telegram
-          </a> -->
+            Твой сертификат бёрнера
+          </RouterLink>
         </div>
       </div>
     </section>

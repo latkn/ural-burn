@@ -2,6 +2,23 @@ import { ref, computed } from 'vue'
 
 const STORAGE_KEY = 'uralburn_onboarding'
 
+/** Флаг в cookie для главной (site/index.html): есть выданный код сертификата. Код в cookie не кладём. */
+export const CERTIFICATE_COOKIE_NAME = 'uralburn_certificate'
+const CERT_COOKIE_MAX_AGE_SEC = 365 * 24 * 60 * 60
+
+function syncCertificateCookie(s: OnboardingState) {
+  const hasCert = Boolean(s.attestationPassed && s.certificateCode?.trim())
+  try {
+    if (hasCert) {
+      document.cookie = `${CERTIFICATE_COOKIE_NAME}=1;path=/;max-age=${CERT_COOKIE_MAX_AGE_SEC};samesite=lax`
+    } else {
+      document.cookie = `${CERTIFICATE_COOKIE_NAME}=;path=/;max-age=0;samesite=lax`
+    }
+  } catch {
+    // ignore
+  }
+}
+
 export type OnboardingPath = 'newcomer' | 'experienced'
 
 export interface OnboardingState {
@@ -76,9 +93,11 @@ function saveState(s: OnboardingState) {
   } catch {
     // ignore
   }
+  syncCertificateCookie(s)
 }
 
 const state = ref<OnboardingState>(loadState())
+syncCertificateCookie(state.value)
 
 export function useOnboardingState() {
   const setPath = (path: OnboardingPath) => {

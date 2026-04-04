@@ -351,6 +351,49 @@ body {
   margin: 0;
 }
 
+/* Возврат к сертификату после онбординга */
+.cert-return-bar {
+  border-top: 1px solid rgba(232, 184, 74, 0.35);
+  background: rgba(232, 184, 74, 0.08);
+  padding: 1.25rem var(--space);
+}
+
+.cert-return-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .cert-return-bar-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.cert-return-bar-inner p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.cert-return-bar-inner a:not(.btn) {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cert-return-bar-inner a:not(.btn):hover {
+  color: var(--accent-hover);
+}
+
 /* Footer */
 .footer {
   padding: 2rem 0;

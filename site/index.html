@@ -200,6 +200,17 @@
     </section>
   </main>
 
+  <div id="uralburn-cert-bar" class="cert-return-bar" hidden>
+    <div class="cert-return-bar-inner">
+      <p>
+        Ты уже прошёл(а) аттестацию и получил(а) сертификат. Если страница обновилась — открой
+        <a href="./onboarding/certificate">страницу сертификата</a>
+        с кодом и PDF.
+      </p>
+      <a href="./onboarding/certificate" class="btn btn-primary">Открыть сертификат</a>
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="container">
       <p>Уральский бёрн — сообщество и событие на принципах Burning Man. Никакой коммерции, рекламы и спонсоров.</p>
@@ -216,6 +227,31 @@
           ym(108319257, 'reachGoal', 'start_onboarding_click');
         }
       });
+    })();
+    (function () {
+      var bar = document.getElementById('uralburn-cert-bar');
+      if (!bar) return;
+
+      function hasCertCookie() {
+        return document.cookie.split(';').some(function (part) {
+          return part.trim().indexOf('uralburn_certificate=1') === 0;
+        });
+      }
+
+      function hasCertInLocalStorage() {
+        try {
+          var raw = localStorage.getItem('uralburn_onboarding');
+          if (!raw) return false;
+          var o = JSON.parse(raw);
+          return !!(o.attestationPassed && o.certificateCode && String(o.certificateCode).trim());
+        } catch (e) {
+          return false;
+        }
+      }
+
+      if (hasCertCookie() || hasCertInLocalStorage()) {
+        bar.hidden = false;
+      }
     })();
   </script>
   <script src="countdown.js"></script>
