@@ -3,6 +3,8 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useOnboardingState } from '@/composables/useOnboardingState'
 import { submitAttestation } from '@/lib/supabase'
+import { shouldUseLocalAttestationFallback } from '@/lib/attestationFallback'
+import { generateLocalCertificateCode } from '@/utils/generateLocalCertificateCode'
 import {
   knowledgeQuestions,
   attestationKnowledgeThreshold,
@@ -91,16 +93,37 @@ async function submitAgreement() {
     onboardingPath: state.value.path,
   })
   submitLoading.value = false
-  if (!res.ok) {
-    submitError.value = res.message || 'Не удалось завершить аттестацию. Попробуйте позже.'
+  if (res.ok) {
+    setAttestationFromServer({
+      certificateCode: res.certificate_code,
+      attestationPassedAt: res.attestation_passed_at,
+      certificatePath: state.value.path,
+      issuedLocally: false,
+    })
+    await router.push({ name: 'certificate' })
     return
   }
-  setAttestationFromServer({
-    certificateCode: res.certificate_code,
-    attestationPassedAt: res.attestation_passed_at,
-    certificatePath: state.value.path,
-  })
-  await router.push({ name: 'certificate' })
+  if (shouldUseLocalAttestationFallback(res)) {
+    setAttestationFromServer({
+      certificateCode: generateLocalCertificateCode(),
+      attestationPassedAt: new Date().toISOString(),
+      certificatePath: state.value.path,
+      issuedLocally: true,
+    })
+    await router.push({ name: 'certificate' })
+    return
+  }
+  submitError.value = res.message || 'Аттестация не принята. Проверь ответы и попробуй снова.'
+}
+
+/** Только если сервер ответил «тест не засчитан» — возвращаемся к вопросам. */
+function restartKnowledgeFromAgreementError() {
+  submitError.value = null
+  phase.value = 'knowledge'
+  kIndex.value = 0
+  answers.value = Array.from({ length: totalKnowledge }, () => null)
+  knowledgeFailure.value = false
+  knowledgeOptionOrder.value = knowledgeQuestions.map((q) => shuffleIndices(q.options.length))
 }
 
 function retryKnowledge() {
@@ -182,7 +205,24 @@ function retryKnowledge() {
       <p class="text-lg leading-relaxed text-burn-cream/85">
         Подтверди согласие <strong class="font-semibold text-burn-cream">со всеми пунктами</strong>.
       </p>
-      <p v-if="submitError" class="text-base text-red-300">{{ submitError }}</p>
+
+      <div
+        v-if="submitError"
+        class="rounded-xl border border-red-500/50 bg-red-500/10 p-6 sm:p-8"
+      >
+        <p class="text-base leading-relaxed text-red-200">{{ submitError }}</p>
+        <p class="mt-3 text-sm leading-relaxed text-burn-cream/70">
+          Если сервер всё же доступен и ответы не сошлись — пройди блок вопросов ещё раз.
+        </p>
+        <button
+          type="button"
+          class="mt-4 rounded-lg bg-burn-orange px-4 py-2 font-medium text-burn-black hover:opacity-90"
+          @click="restartKnowledgeFromAgreementError"
+        >
+          К вопросам заново
+        </button>
+      </div>
+
       <div class="rounded-xl border border-burn-border bg-burn-card p-6 sm:p-8">
         <ul class="space-y-4">
           <li v-for="(item, i) in agreementItems" :key="i" class="flex items-start gap-3">

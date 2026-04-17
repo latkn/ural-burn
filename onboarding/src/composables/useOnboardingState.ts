@@ -29,8 +29,10 @@ export interface OnboardingState {
   quizPassed: boolean
   attestationPassed: boolean
   attestationPassedAt: string | null
-  /** Код сертификата выдаётся только сервером после submit_attestation */
+  /** Код сертификата — с сервера или сгенерирован в браузере при фолбеке */
   certificateCode: string | null
+  /** true если код выдан локально (Supabase недоступен) */
+  certificateIssuedLocally: boolean
   /** Имя на сертификате — только локально в браузере */
   certificateHolderName: string | null
 }
@@ -50,6 +52,7 @@ function loadState(): OnboardingState {
         attestationPassed,
         attestationPassedAt: attestationPassed ? parsed.attestationPassedAt ?? null : null,
         certificateCode: attestationPassed ? code : null,
+        certificateIssuedLocally: Boolean(parsed.certificateIssuedLocally),
         certificateHolderName: parsed.certificateHolderName ?? null,
       }
       const needsPersist =
@@ -83,6 +86,7 @@ function loadState(): OnboardingState {
     attestationPassed: false,
     attestationPassedAt: null,
     certificateCode: null,
+    certificateIssuedLocally: false,
     certificateHolderName: null,
   }
 }
@@ -115,11 +119,13 @@ export function useOnboardingState() {
     saveState(state.value)
   }
 
-  /** Вызывать только после успешного ответа RPC submit_attestation */
+  /** После успешного RPC или локального фолбека */
   const setAttestationFromServer = (payload: {
     certificateCode: string
     attestationPassedAt: string
     certificatePath: OnboardingPath | null
+    /** Код сгенерирован в браузере — не в базе организаторов */
+    issuedLocally?: boolean
   }) => {
     state.value = {
       ...state.value,
@@ -127,6 +133,7 @@ export function useOnboardingState() {
       attestationPassedAt: payload.attestationPassedAt,
       certificateCode: payload.certificateCode.trim(),
       certificatePath: payload.certificatePath,
+      certificateIssuedLocally: Boolean(payload.issuedLocally),
     }
     saveState(state.value)
   }
@@ -153,6 +160,7 @@ export function useOnboardingState() {
       attestationPassed: false,
       attestationPassedAt: null,
       certificateCode: null,
+      certificateIssuedLocally: false,
       certificateHolderName: null,
     }
     saveState(state.value)

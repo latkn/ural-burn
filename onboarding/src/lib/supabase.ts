@@ -9,13 +9,29 @@ if (!url || !anonKey) {
 
 export const supabase = url && anonKey ? createClient(url, anonKey) : null
 
+/** Сообщения браузера про сбой fetch (офлайн, блокировка, CORS, DPI и т.д.) — без технического шума. */
+function friendlyFetchFailureMessage(raw: string | undefined): string {
+  if (!raw) return 'Не удалось связаться с сервером. Проверьте интернет и попробуйте ещё раз.'
+  const m = raw.toLowerCase()
+  if (
+    m.includes('network error') ||
+    m.includes('failed to fetch') ||
+    m.includes('load failed') ||
+    m.includes('networkerror') ||
+    (m.includes('typeerror') && m.includes('fetch'))
+  ) {
+    return 'Не удалось связаться с сервером (сеть или блокировка). Попробуйте другой Wi‑Fi/VPN, отключите блокировщик на сайте или повторите позже.'
+  }
+  return raw
+}
+
 export type SubmitAttestationResult =
   | { ok: true; certificate_code: string; attestation_passed_at: string }
   | { ok: false; error: string; message?: string }
 
 /**
  * Проверка ответов на сервере и выдача кода сертификата.
- * Клиент не может «придумать» код — только успешное прохождение аттестации.
+ * Если RPC недоступен, приложение выдаёт код локально (см. attestationFallback).
  */
 export async function submitAttestation(params: {
   knowledgeAnswers: number[]
@@ -29,16 +45,28 @@ export async function submitAttestation(params: {
       message: 'Сервис недоступен. Проверьте подключение и настройки Supabase.',
     }
   }
-  const { data, error } = await supabase.rpc('submit_attestation', {
-    p_knowledge_answers: params.knowledgeAnswers,
-    p_agreement_all: params.agreementAll,
-    p_onboarding_path: params.onboardingPath,
-  })
-  if (error) {
+  let data: unknown
+  try {
+    const out = await supabase.rpc('submit_attestation', {
+      p_knowledge_answers: params.knowledgeAnswers,
+      p_agreement_all: params.agreementAll,
+      p_onboarding_path: params.onboardingPath,
+    })
+    data = out.data
+    const error = out.error
+    if (error) {
+      return {
+        ok: false,
+        error: error.code || 'rpc_error',
+        message: friendlyFetchFailureMessage(error.message) || 'Не удалось отправить аттестацию.',
+      }
+    }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e)
     return {
       ok: false,
-      error: error.code || 'rpc_error',
-      message: error.message || 'Не удалось отправить аттестацию.',
+      error: 'fetch_failed',
+      message: friendlyFetchFailureMessage(msg),
     }
   }
   const row = data as {

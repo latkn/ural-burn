@@ -200,6 +200,8 @@
   },
   "active": "9027210c62c24048",
   "lastOpenFiles": [
+    "onboarding/src/lib/attestationFallback.ts",
+    "onboarding/src/utils/generateLocalCertificateCode.ts",
     "onboarding/dist/assets/welcome-fire_2-Jyp25xea.jpg",
     "onboarding/dist/assets/welcome-burning-S9RAJgnp.jpg",
     "onboarding/dist/assets/temple-CeIsRODv.jpg",
@@ -218,9 +220,7 @@
     "onboarding/dist/assets/FormattedBody.vue_vue_type_script_setup_true_lang-wSH3FMj7.js",
     "onboarding/dist/assets/fantastic-love-camp-BxF4W302.jpg",
     "onboarding/dist/assets/camp-bar-chud-beloglazaya-IqjFQQEK.jpg",
-    "onboarding/dist/assets/certificatePdf-DKiNQv_9.js",
     "onboarding/dist/assets/building_art_2-DBHagVLs.jpg",
-    "onboarding/dist/assets/burning-CJpCkdQZ.jpg",
     "onboarding/node_modules/semver/README.md",
     "onboarding/node_modules/sharp/README.md",
     "onboarding/node_modules/color/README.md",

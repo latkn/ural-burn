@@ -29,6 +29,7 @@ const passedAt = computed(() => {
 
 const displayName = computed(() => holderName.value.trim() || '________________')
 const hasCompletedTraining = computed(() => state.value.certificatePath === 'newcomer')
+const issuedLocally = computed(() => state.value.certificateIssuedLocally)
 
 const canDownload = computed(() => holderName.value.trim().length >= 2)
 
@@ -143,7 +144,10 @@ onUnmounted(() => {
           </p>
         </div>
       </div>
-      <p class="mt-3 text-xs text-burn-muted leading-relaxed">
+      <p v-if="issuedLocally" class="mt-3 text-xs text-burn-muted leading-relaxed">
+        Код сгенерирован на этой странице (сервер сейчас недоступен). Сохрани PDF и передай код организаторам — дубликаты сверяем по списку вручную.
+      </p>
+      <p v-else class="mt-3 text-xs text-burn-muted leading-relaxed">
         Код выдан сервером после успешной аттестации и записан в базу (без имени) — организаторы могут проверить его в админке.
       </p>
     </div>
