@@ -8,6 +8,24 @@ function isAppleMobile(): boolean {
   return iOS || iPadOS13Plus
 }
 
+/** Safari (в т.ч. macOS): после долгого await программный download часто режется как «не по жесту». */
+function isWebKitSafari(): boolean {
+  const ua = navigator.userAgent
+  return /Safari/i.test(ua) && !/Chrome|Chromium|CriOS|Edg|Android|OPR|Opera/i.test(ua)
+}
+
+/**
+ * Нужен второй явный тап пользователя перед сохранением файла:
+ * iOS/iPadOS, встроенные браузеры (TG/Instagram и т.д.), Safari.
+ */
+export function needsDeferredPdfSave(): boolean {
+  if (isAppleMobile()) return true
+  if (isWebKitSafari()) return true
+  const ua = navigator.userAgent
+  if (/Instagram|FBAN|FBAV|FB_IAB|MicroMessenger|TikTok|Line\//i.test(ua)) return true
+  return false
+}
+
 /**
  * Снимок вне родителя с overflow — иначе html2canvas на iOS часто даёт обрезанный/сдвинутый кадр.
  * Контейнер off-screen с явной шириной/высотой, иначе клон в 0×0 схлопнется.
@@ -45,7 +63,7 @@ function captureShell(element: HTMLElement): { clone: HTMLElement; cleanup: () =
   }
 }
 
-function triggerDownload(blob: Blob, filename: string): void {
+export function downloadBlobAsFile(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
@@ -59,9 +77,10 @@ function triggerDownload(blob: Blob, filename: string): void {
 }
 
 /**
- * Рендерит DOM-элемент в PDF (A4). Подходит для кириллицы при использовании веб-шрифтов на странице.
+ * Собирает PDF в память. Сохранение на диск — отдельным синхронным действием пользователя
+ * (см. needsDeferredPdfSave), иначе iOS/Safari часто блокируют загрузку после await.
  */
-export async function downloadCertificatePdf(element: HTMLElement, filename: string): Promise<void> {
+export async function buildCertificatePdfBlob(element: HTMLElement): Promise<Blob> {
   if (document.fonts?.ready) {
     await document.fonts.ready
   }
@@ -96,12 +115,7 @@ export async function downloadCertificatePdf(element: HTMLElement, filename: str
       pdf.addImage(imgData, 'PNG', x, 0, scaledW, pdfH, undefined, 'NONE')
     }
 
-    if (isAppleMobile()) {
-      const blob = pdf.output('blob')
-      triggerDownload(blob, filename)
-    } else {
-      pdf.save(filename)
-    }
+    return pdf.output('blob')
   } finally {
     cleanup()
   }

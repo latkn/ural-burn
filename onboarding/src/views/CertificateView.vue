@@ -2,6 +2,11 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
 import { useOnboardingState } from '@/composables/useOnboardingState'
+import {
+  buildCertificatePdfBlob,
+  downloadBlobAsFile,
+  needsDeferredPdfSave,
+} from '@/lib/certificatePdf'
 const router = useRouter()
 const { state, setCertificateHolderName } = useOnboardingState()
 
@@ -9,6 +14,8 @@ const certRef = ref<HTMLElement | null>(null)
 const holderName = ref('')
 const downloading = ref(false)
 const pdfError = ref<string | null>(null)
+/** PDF уже собран — ждём второй тап (iOS / Safari / встроенные браузеры). */
+const preparedPdf = ref<{ blob: Blob; filename: string } | null>(null)
 const copyStatus = ref<'idle' | 'success' | 'error'>('idle')
 let copyResetTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -33,6 +40,10 @@ const issuedLocally = computed(() => state.value.certificateIssuedLocally)
 
 const canDownload = computed(() => holderName.value.trim().length >= 2)
 
+const canUseNativeShare = computed(
+  () => typeof navigator !== 'undefined' && typeof navigator.share === 'function',
+)
+
 /** Публичная ссылка-приглашение в Telegram; переопределяется через VITE_CHAT_LINK в Netlify / .env */
 const communityChatUrl =
   import.meta.env.VITE_CHAT_LINK?.trim() || 'https://t.me/+0MWtWVzR6pdlMTIy'
@@ -47,6 +58,7 @@ onMounted(() => {
 
 watch(holderName, (v) => {
   setCertificateHolderName(v)
+  preparedPdf.value = null
 })
 
 async function onDownloadPdf() {
@@ -56,18 +68,51 @@ async function onDownloadPdf() {
     return
   }
   if (!certRef.value) return
+  preparedPdf.value = null
   downloading.value = true
   try {
-    const { downloadCertificatePdf } = await import('@/lib/certificatePdf')
     const safe =
       holderName.value.trim().replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s-]/g, '').slice(0, 80) || 'participant'
     const fname = `Ural-Burn-sertifikat-${code.value}-${safe.replace(/\s+/g, '_')}.pdf`
-    await downloadCertificatePdf(certRef.value, fname)
+    const blob = await buildCertificatePdfBlob(certRef.value)
+    if (needsDeferredPdfSave()) {
+      preparedPdf.value = { blob, filename: fname }
+      return
+    }
+    downloadBlobAsFile(blob, fname)
   } catch (e) {
     pdfError.value = 'Не удалось сформировать PDF. Попробуйте другой браузер или отключите блокировку загрузок.'
     console.error(e)
   } finally {
     downloading.value = false
+  }
+}
+
+function onCommitPreparedPdf() {
+  pdfError.value = null
+  const p = preparedPdf.value
+  if (!p) return
+  downloadBlobAsFile(p.blob, p.filename)
+}
+
+async function onSharePreparedPdf() {
+  pdfError.value = null
+  const p = preparedPdf.value
+  if (!p) return
+  const file = new File([p.blob], p.filename, { type: 'application/pdf' })
+  try {
+    if (navigator.canShare && !navigator.canShare({ files: [file] })) {
+      pdfError.value =
+        'С этой страницы «Поделиться файлом» недоступно. Открой сайт в Safari/Chrome и нажми «Сохранить PDF».'
+      return
+    }
+    await navigator.share({ files: [file], title: 'Сертификат Уральский бёрн' })
+  } catch (e) {
+    const err = e as { name?: string }
+    if (err?.name === 'AbortError') return
+    pdfError.value =
+      'Не вышло открыть меню «Поделиться». Нажми «Сохранить PDF» — обычно кладёт в «Загрузки» или в «Файлы».'
+    console.error(e)
   }
 }
 
@@ -102,6 +147,7 @@ onUnmounted(() => {
       <h1 class="font-display text-3xl text-burn-cream">Сертификат бёрнера</h1>
       <p class="mt-3 text-burn-cream/85 leading-relaxed">
         Ты прошёл(а) аттестацию. Укажи имя для сертификата — оно сохранится только в этом браузере.
+        Экран сертификата и кнопка PDF работают <strong class="font-semibold text-burn-cream">в том же браузере на том же устройстве</strong>, где ты нажал(а) «Готово» после теста. С другого телефона без сохранённого кода страница не откроется — заранее <strong class="font-semibold text-burn-cream">скачай PDF или скопируй код</strong>.
         Ниже твой уникальный код: его можно сообщить организаторам или приложить к сообщению вместе с PDF.
       </p>
     </div>
@@ -170,6 +216,34 @@ onUnmounted(() => {
     </div>
 
     <p v-if="pdfError" class="text-sm text-amber-400">{{ pdfError }}</p>
+
+    <div
+      v-if="preparedPdf"
+      class="rounded-xl border border-burn-orange/50 bg-burn-orange/5 p-4 space-y-3"
+    >
+      <p class="text-sm text-burn-cream/90 leading-relaxed">
+        PDF собран. На телефоне или в Safari после генерации файл часто не качается с первого раза —
+        нажми кнопку ниже ещё раз (это ограничение браузера, не бага сайта). Во встроенном браузере
+        Telegram/Instagram лучше открыть страницу в обычном Safari или Chrome.
+      </p>
+      <div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+        <button
+          type="button"
+          class="inline-flex items-center justify-center rounded-xl bg-burn-orange px-6 py-3 font-semibold text-burn-black transition hover:bg-burn-orangeLight"
+          @click="onCommitPreparedPdf"
+        >
+          Сохранить PDF
+        </button>
+        <button
+          v-if="canUseNativeShare"
+          type="button"
+          class="inline-flex items-center justify-center rounded-xl border border-burn-orange/60 bg-burn-orange/10 px-6 py-3 text-sm font-semibold text-burn-orange transition hover:bg-burn-orange/20"
+          @click="onSharePreparedPdf"
+        >
+          Поделиться / в «Файлы»
+        </button>
+      </div>
+    </div>
 
     <div class="overflow-x-auto -mx-4 px-4 pb-2">
       <!-- Лист A4 595×842 (72 dpi) — для PDF и превью -->
