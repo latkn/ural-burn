@@ -8,21 +8,35 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <!-- Yandex.Metrika counter -->
-  <script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108319257', 'ym');
+  <script>
+    (function () {
+      var CONSENT_KEY = 'uralburn_cookie_consent';
+      var METRIKA_ID = 108319257;
 
-    ym(108319257, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+      function loadMetrika() {
+        if (window.__uralburnMetrikaLoaded) return;
+        window.__uralburnMetrikaLoaded = true;
+        (function(m,e,t,r,i,k,a){
+          m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+          m[i].l=1*new Date();
+          for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+          k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a);
+        })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+        ym(METRIKA_ID, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:'dataLayer', referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+      }
+
+      window.__uralburnLoadMetrika = loadMetrika;
+      try {
+        if (localStorage.getItem(CONSENT_KEY) === 'analytics') {
+          loadMetrika();
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
   </script>
-  <!-- /Yandex.Metrika counter -->
 </head>
 <body>
-  <noscript><div><img src="https://mc.yandex.ru/watch/108319257" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
   <header class="header">
     <div class="header-inner">
       <a href="#" class="logo">Уральский бёрн</a>
@@ -214,10 +228,73 @@
   <footer class="footer">
     <div class="container">
       <p>Уральский бёрн — сообщество и событие на принципах Burning Man. Никакой коммерции, рекламы и спонсоров.</p>
+      <p class="footer-meta">
+        <a href="/privacy.html">Политика конфиденциальности и cookie</a>
+      </p>
     </div>
   </footer>
 
+  <div id="cookie-consent-banner" class="cookie-banner" hidden>
+    <div class="cookie-banner-inner">
+      <p>
+        Мы используем cookie для корректной работы сайта и улучшения сервиса. Вы можете принять все cookie
+        или оставить только необходимые. Подробнее: <a href="/privacy.html">политика конфиденциальности</a>.
+      </p>
+      <div class="cookie-banner-actions">
+        <button type="button" class="btn btn-ghost" id="cookie-necessary-btn">Только необходимые</button>
+        <button type="button" class="btn btn-primary" id="cookie-accept-btn">Принять все cookie</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    (function () {
+      var CONSENT_KEY = 'uralburn_cookie_consent';
+      var banner = document.getElementById('cookie-consent-banner');
+      var acceptBtn = document.getElementById('cookie-accept-btn');
+      var necessaryBtn = document.getElementById('cookie-necessary-btn');
+      if (!banner || !acceptBtn || !necessaryBtn) return;
+
+      function saveConsent(value) {
+        try {
+          localStorage.setItem(CONSENT_KEY, value);
+        } catch (e) {
+          // ignore
+        }
+      }
+
+      function hideBanner() {
+        banner.hidden = true;
+      }
+
+      function showBanner() {
+        banner.hidden = false;
+      }
+
+      var current = null;
+      try {
+        current = localStorage.getItem(CONSENT_KEY);
+      } catch (e) {
+        // ignore
+      }
+      if (current !== 'analytics' && current !== 'necessary') {
+        showBanner();
+      }
+
+      necessaryBtn.addEventListener('click', function () {
+        saveConsent('necessary');
+        hideBanner();
+      });
+
+      acceptBtn.addEventListener('click', function () {
+        saveConsent('analytics');
+        if (typeof window.__uralburnLoadMetrika === 'function') {
+          window.__uralburnLoadMetrika();
+        }
+        hideBanner();
+      });
+    })();
+
     (function () {
       var startBtn = document.getElementById('start-onboarding-btn');
       if (!startBtn) return;

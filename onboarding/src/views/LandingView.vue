@@ -503,6 +503,10 @@ onUnmounted(() => {
         <RouterLink to="/how-to-make-camp" class="underline underline-offset-2 hover:text-burn-cream">
           Как сделать кемп
         </RouterLink>
+        <span class="text-burn-muted/80" aria-hidden="true">·</span>
+        <a href="/privacy.html" class="underline underline-offset-2 hover:text-burn-cream">
+          Политика конфиденциальности и cookie
+        </a>
       </p>
     </footer>
   </div>

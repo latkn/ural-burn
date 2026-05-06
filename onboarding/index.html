@@ -76,22 +76,135 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <!-- Yandex.Metrika counter -->
-  <script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108319257', 'ym');
+  <script>
+    (function () {
+      var CONSENT_KEY = 'uralburn_cookie_consent';
+      var METRIKA_ID = 108319257;
 
-    ym(108319257, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+      function loadMetrika() {
+        if (window.__uralburnMetrikaLoaded) return;
+        window.__uralburnMetrikaLoaded = true;
+        (function(m,e,t,r,i,k,a){
+          m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+          m[i].l=1*new Date();
+          for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+          k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a);
+        })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+        ym(METRIKA_ID, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:'dataLayer', referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+      }
+
+      window.__uralburnLoadMetrika = loadMetrika;
+      try {
+        if (localStorage.getItem(CONSENT_KEY) === 'analytics') {
+          loadMetrika();
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
   </script>
-  <!-- /Yandex.Metrika counter -->
+  <style>
+    .cookie-banner {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(8, 8, 8, 0.95);
+      backdrop-filter: blur(6px);
+    }
+    .cookie-banner__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.8rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      color: rgba(247, 241, 227, 0.85);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+    .cookie-banner__inner a {
+      color: #f59e0b;
+    }
+    .cookie-banner__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .cookie-banner__btn {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: transparent;
+      color: rgba(247, 241, 227, 0.95);
+      border-radius: 10px;
+      padding: 0.45rem 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.82rem;
+    }
+    .cookie-banner__btn--primary {
+      background: #f59e0b;
+      border-color: #f59e0b;
+      color: #121212;
+    }
+  </style>
 </head>
 <body>
-  <noscript><div><img src="https://mc.yandex.ru/watch/108319257" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  <div id="cookie-consent-banner" class="cookie-banner" hidden>
+    <div class="cookie-banner__inner">
+      <p>
+        Мы используем cookie для корректной работы сайта и улучшения сервиса. Вы можете принять все cookie
+        или оставить только необходимые. Подробнее: <a href="/privacy.html">политика конфиденциальности</a>.
+      </p>
+      <div class="cookie-banner__actions">
+        <button type="button" class="cookie-banner__btn" id="cookie-necessary-btn">Только необходимые</button>
+        <button type="button" class="cookie-banner__btn cookie-banner__btn--primary" id="cookie-accept-btn">Принять все cookie</button>
+      </div>
+    </div>
+  </div>
   <div id="app"></div>
+  <script>
+    (function () {
+      var CONSENT_KEY = 'uralburn_cookie_consent';
+      var banner = document.getElementById('cookie-consent-banner');
+      var acceptBtn = document.getElementById('cookie-accept-btn');
+      var necessaryBtn = document.getElementById('cookie-necessary-btn');
+      if (!banner || !acceptBtn || !necessaryBtn) return;
+
+      function saveConsent(value) {
+        try {
+          localStorage.setItem(CONSENT_KEY, value);
+        } catch (e) {
+          // ignore
+        }
+      }
+
+      var current = null;
+      try {
+        current = localStorage.getItem(CONSENT_KEY);
+      } catch (e) {
+        // ignore
+      }
+      if (current !== 'analytics' && current !== 'necessary') {
+        banner.hidden = false;
+      }
+
+      necessaryBtn.addEventListener('click', function () {
+        saveConsent('necessary');
+        banner.hidden = true;
+      });
+
+      acceptBtn.addEventListener('click', function () {
+        saveConsent('analytics');
+        if (typeof window.__uralburnLoadMetrika === 'function') {
+          window.__uralburnLoadMetrika();
+        }
+        banner.hidden = true;
+      });
+    })();
+  </script>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
