@@ -59,6 +59,8 @@ onUnmounted(() => {
           :src="img('main.jpg')"
           alt="Уральский Бёрн"
           class="w-full h-auto max-h-[90vh] object-cover object-center block"
+          fetchpriority="high"
+          decoding="async"
         />
       </section>
 
@@ -143,9 +145,11 @@ onUnmounted(() => {
           <div class="grid gap-0 md:grid-cols-2">
             <div class="relative min-h-[17rem] md:min-h-[22rem]">
               <img
-                :src="img('welcome_home.png')"
+                :src="img('welcome_home.jpg')"
                 alt="Добро пожаловать домой"
                 class="absolute inset-0 h-full w-full object-cover object-center"
+                loading="lazy"
+                decoding="async"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-burn-black/35 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-burn-black/15"></div>
             </div>
@@ -192,9 +196,11 @@ onUnmounted(() => {
           <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
             <div class="relative aspect-[16/10] shrink-0">
               <img
-                :src="img('flame.png')"
+                :src="img('flame.jpg')"
                 alt="Пламя и легенды"
                 class="w-full h-full object-cover object-[50%_48%] scale-[1.05]"
+                loading="lazy"
+                decoding="async"
                 style="
                   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 58%, transparent 100%);
                   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 58%, transparent 100%);
@@ -213,9 +219,11 @@ onUnmounted(() => {
           <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
             <div class="relative aspect-[16/10] shrink-0">
               <img
-                :src="img('City.png')"
+                :src="img('City.jpg')"
                 alt="Город-очаг"
                 class="w-full h-full object-cover object-[50%_42%] scale-[1.12]"
+                loading="lazy"
+                decoding="async"
                 style="
                   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 58%, transparent 100%);
                   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 58%, transparent 100%);
@@ -234,9 +242,11 @@ onUnmounted(() => {
           <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
             <div class="relative aspect-[16/10] shrink-0">
               <img
-                :src="img('mask.png')"
+                :src="img('mask.jpg')"
                 alt="Личное наследие"
                 class="w-full h-full object-cover object-[50%_38%] scale-[1.08]"
+                loading="lazy"
+                decoding="async"
                 style="
                   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 58%, transparent 100%);
                   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 58%, transparent 100%);
@@ -284,6 +294,8 @@ onUnmounted(() => {
                 :src="img('welcome-fire_gates_s.jpg')"
                 alt="Пламенные ворота"
                 class="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div class="p-6">
@@ -297,6 +309,8 @@ onUnmounted(() => {
                 :src="img('burning_mistress-of-the-copper-mountain.jpg')"
                 alt="Хозяйка медной горы"
                 class="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div class="p-6">
@@ -312,6 +326,8 @@ onUnmounted(() => {
                 :src="img('temple.jpg')"
                 alt="Темпл"
                 class="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div class="p-6">
@@ -348,9 +364,11 @@ onUnmounted(() => {
           <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
             <div class="relative aspect-[16/10] shrink-0 overflow-hidden">
               <img
-                :src="img('wildtribe.png')"
+                :src="img('wildtribe.jpg')"
                 alt="Flame Tribe"
                 class="absolute inset-0 h-full w-full object-cover object-[50%_48%]"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
@@ -368,6 +386,8 @@ onUnmounted(() => {
                 :src="img('fantastic-love-camp.jpg')"
                 alt="Fantastic Love"
                 class="absolute inset-0 h-full w-full object-cover object-[50%_45%]"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
@@ -384,6 +404,8 @@ onUnmounted(() => {
                 :src="img('camp-bar-chud-beloglazaya.jpg')"
                 alt="Чудь Белоглазая"
                 class="absolute inset-0 h-full w-full object-cover object-[50%_42%]"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
@@ -400,6 +422,8 @@ onUnmounted(() => {
                 :src="img('secret_camp.jpg')"
                 alt="Secret Camp"
                 class="absolute inset-0 h-full w-full object-cover object-[50%_46%]"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
@@ -414,9 +438,11 @@ onUnmounted(() => {
           <article class="rounded-xl border border-burn-border bg-burn-card overflow-hidden h-full flex flex-col">
             <div class="relative aspect-[16/10] shrink-0 overflow-hidden">
               <img
-                :src="img('banya.png')"
+                :src="img('banya.jpg')"
                 alt="Банные церемонии"
                 class="absolute inset-0 h-full w-full object-cover object-[50%_44%]"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
@@ -433,6 +459,8 @@ onUnmounted(() => {
                 :src="img('tundra.jpg')"
                 alt="Tundra Club"
                 class="absolute inset-0 h-full w-full object-cover object-[50%_43%]"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
@@ -449,6 +477,8 @@ onUnmounted(() => {
                 :src="img('camp_brothers_chicko.jpg')"
                 alt="Братья Цыплята"
                 class="absolute inset-0 h-full w-full object-cover object-[50%_40%]"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div class="bg-burn-card px-5 pb-5 pt-4 flex flex-col gap-2 flex-1">
