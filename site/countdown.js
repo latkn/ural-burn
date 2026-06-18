@@ -4,7 +4,7 @@
  */
 (function () {
   // Дата начала события (год, месяц - 1, день, час, минута)
-  var TARGET_DATE = new Date(2026, 6, 1, 12, 0); // 1 июля 2026, 12:00
+  var TARGET_DATE = new Date(2026, 6, 23, 0, 0); // 23 июля 2026, 00:00
 
   var daysEl = document.getElementById('days');
   var hoursEl = document.getElementById('hours');

@@ -74,6 +74,30 @@ onUnmounted(() => {
             Место, которое мы сами сделаем таким, каким хотим его видеть.
           </p>
 
+          <div
+            class="rounded-2xl border border-burn-orange/25 bg-burn-black/40 px-5 py-5 sm:px-6 max-w-lg mx-auto"
+            aria-label="Даты Уральского Бёрна 2026"
+          >
+            <p class="font-display text-2xl sm:text-3xl text-burn-orange tracking-tight">
+              23–26 июля 2026
+            </p>
+            <p class="text-burn-cream/65 text-sm mt-1">Урал</p>
+            <div class="mt-4 grid grid-cols-3 gap-2 text-center">
+              <div class="rounded-lg border border-burn-border/80 bg-burn-card/40 px-2 py-2.5">
+                <span class="block font-display text-lg sm:text-xl text-burn-cream/75 leading-none">21–22</span>
+                <span class="block text-[10px] uppercase tracking-wider text-burn-muted mt-1.5">монтаж</span>
+              </div>
+              <div class="rounded-lg border border-burn-orange/50 bg-burn-orange/10 px-2 py-2.5 shadow-[inset_0_0_20px_rgba(234,88,12,0.08)]">
+                <span class="block font-display text-lg sm:text-xl text-burn-orange leading-none">23–26</span>
+                <span class="block text-[10px] uppercase tracking-wider text-burn-orange/85 mt-1.5">событие</span>
+              </div>
+              <div class="rounded-lg border border-burn-border/80 bg-burn-card/40 px-2 py-2.5">
+                <span class="block font-display text-lg sm:text-xl text-burn-cream/75 leading-none">27</span>
+                <span class="block text-[10px] uppercase tracking-wider text-burn-muted mt-1.5">демонтаж</span>
+              </div>
+            </div>
+          </div>
+
           <div v-if="!eventStarted" class="space-y-3">
             <p class="text-burn-cream/80 text-sm sm:text-base">
               До старта:
@@ -177,6 +201,84 @@ onUnmounted(() => {
         <p class="text-burn-orange font-medium tracking-wide uppercase text-sm">
           Уральский Бёрн 2026
         </p>
+
+        <div class="overflow-hidden rounded-2xl border border-burn-orange/30 bg-gradient-to-br from-burn-card via-burn-card to-burn-black/50 p-6 sm:p-8">
+          <h3 class="font-display text-2xl sm:text-3xl text-burn-cream mb-2">Календарь</h3>
+          <p class="text-burn-cream/65 text-sm mb-6 max-w-2xl">
+            Монтаж и демонтаж — часть ответственности перед местом и сообществом. Уезжать до конца
+            демонтажа своего кемпа нельзя.
+          </p>
+
+          <div class="hidden sm:block relative pt-2 pb-1">
+            <div
+              class="absolute left-[10%] right-[10%] top-[2.6rem] h-px bg-gradient-to-r from-burn-muted/25 via-burn-orange/55 to-burn-muted/25"
+              aria-hidden="true"
+            />
+            <div class="grid grid-cols-[1fr_2.2fr_1fr] gap-4 items-start relative">
+              <div class="text-center px-2">
+                <div class="mx-auto mb-3 h-3 w-3 rounded-full border-2 border-burn-muted/50 bg-burn-black" />
+                <p class="font-display text-3xl text-burn-cream/80 leading-none">21–22</p>
+                <p class="text-xs uppercase tracking-[0.15em] text-burn-muted mt-1">июля</p>
+                <p class="font-medium text-burn-cream/90 text-sm mt-3">Монтаж</p>
+                <p class="text-burn-cream/60 text-xs mt-1.5 leading-relaxed">
+                  Сборка кемпов, арта и инфраструктуры
+                </p>
+              </div>
+              <div class="text-center px-3">
+                <div class="mx-auto mb-3 h-3.5 w-3.5 rounded-full border-2 border-burn-orange bg-burn-orange shadow-[0_0_12px_rgba(234,88,12,0.45)]" />
+                <p class="font-display text-4xl text-burn-orange leading-none">23–26</p>
+                <p class="text-xs uppercase tracking-[0.15em] text-burn-orange/80 mt-1">июля</p>
+                <p class="font-medium text-burn-cream text-sm mt-3">Уральский Бёрн</p>
+                <p class="text-burn-cream/70 text-xs mt-1.5 leading-relaxed">
+                  Четыре дня события — творчество, шифты, огонь и встречи
+                </p>
+              </div>
+              <div class="text-center px-2">
+                <div class="mx-auto mb-3 h-3 w-3 rounded-full border-2 border-burn-muted/50 bg-burn-black" />
+                <p class="font-display text-3xl text-burn-cream/80 leading-none">27</p>
+                <p class="text-xs uppercase tracking-[0.15em] text-burn-muted mt-1">июля</p>
+                <p class="font-medium text-burn-cream/90 text-sm mt-3">Демонтаж</p>
+                <p class="text-burn-cream/60 text-xs mt-1.5 leading-relaxed">
+                  Разбор и уборка территории по принципу LNT
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="sm:hidden space-y-3">
+            <div class="flex gap-4 rounded-xl border border-burn-border/80 bg-burn-black/30 p-4">
+              <div class="shrink-0 text-center w-14">
+                <p class="font-display text-2xl text-burn-cream/80 leading-none">21–22</p>
+                <p class="text-[10px] uppercase tracking-wider text-burn-muted mt-1">июл</p>
+              </div>
+              <div>
+                <p class="font-medium text-burn-cream/90">Монтаж</p>
+                <p class="text-burn-cream/60 text-sm mt-0.5">Сборка кемпов, арта и инфраструктуры</p>
+              </div>
+            </div>
+            <div class="flex gap-4 rounded-xl border border-burn-orange/45 bg-burn-orange/10 p-4">
+              <div class="shrink-0 text-center w-14">
+                <p class="font-display text-2xl text-burn-orange leading-none">23–26</p>
+                <p class="text-[10px] uppercase tracking-wider text-burn-orange/80 mt-1">июл</p>
+              </div>
+              <div>
+                <p class="font-medium text-burn-cream">Уральский Бёрн</p>
+                <p class="text-burn-cream/70 text-sm mt-0.5">Четыре дня события — творчество, шифты, огонь и встречи</p>
+              </div>
+            </div>
+            <div class="flex gap-4 rounded-xl border border-burn-border/80 bg-burn-black/30 p-4">
+              <div class="shrink-0 text-center w-14">
+                <p class="font-display text-2xl text-burn-cream/80 leading-none">27</p>
+                <p class="text-[10px] uppercase tracking-wider text-burn-muted mt-1">июл</p>
+              </div>
+              <div>
+                <p class="font-medium text-burn-cream/90">Демонтаж</p>
+                <p class="text-burn-cream/60 text-sm mt-0.5">Разбор и уборка территории по принципу LNT</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="w-full lg:w-2/5 rounded-2xl border border-burn-orange/45 bg-burn-orange/10 px-5 py-4">
           <p class="text-burn-cream/90 text-sm uppercase tracking-[0.2em]">Тема 2026 года</p>
           <h2 class="font-display text-3xl sm:text-4xl text-burn-orange mt-1">Наследие</h2>
