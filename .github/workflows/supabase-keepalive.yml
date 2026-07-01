@@ -1,0 +1,55 @@
+# Ежедневный ping Supabase, чтобы бесплатный проект не уходил на паузу (7 дней без активности).
+# Секреты уже используются в deploy-github-pages.yml:
+#   VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
+name: Supabase keepalive
+
+on:
+  schedule:
+    # Каждый день в 06:00 UTC (~11:00 Екатеринбург)
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
+            echo "::error::Задайте секреты VITE_SUPABASE_URL и VITE_SUPABASE_ANON_KEY в Settings → Secrets and variables → Actions"
+            exit 1
+          fi
+
+          BASE="${SUPABASE_URL%/}"
+          echo "Pinging ${BASE} ..."
+
+          HTTP_CODE=$(curl -sS -o /tmp/supabase-ping-body.txt -w "%{http_code}" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            -H "Accept: application/json" \
+            "${BASE}/rest/v1/")
+
+          echo "REST /rest/v1/ → HTTP ${HTTP_CODE}"
+          head -c 200 /tmp/supabase-ping-body.txt || true
+          echo
+
+          if [ "${HTTP_CODE}" -ge 500 ]; then
+            echo "::error::Supabase вернул ${HTTP_CODE}"
+            exit 1
+          fi
+
+          # Дополнительно — auth health (на случай если REST недоступен)
+          AUTH_CODE=$(curl -sS -o /dev/null -w "%{http_code}" "${BASE}/auth/v1/health")
+          echo "Auth /auth/v1/health → HTTP ${AUTH_CODE}"
+
+          if [ "${AUTH_CODE}" -ge 500 ]; then
+            echo "::error::Supabase Auth health вернул ${AUTH_CODE}"
+            exit 1
+          fi
+
+          echo "Keepalive OK"
