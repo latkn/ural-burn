@@ -46,7 +46,7 @@ const canUseNativeShare = computed(
 
 /** Публичная ссылка-приглашение в Telegram; переопределяется через VITE_CHAT_LINK в Netlify / .env */
 const communityChatUrl =
-  import.meta.env.VITE_CHAT_LINK?.trim() || 'https://t.me/+0MWtWVzR6pdlMTIy'
+  import.meta.env.VITE_CHAT_LINK?.trim() || 'https://t.me/+yLBQdpUoRS42NTYy'
 
 onMounted(() => {
   if (!state.value.attestationPassed || !state.value.certificateCode?.trim()) {
